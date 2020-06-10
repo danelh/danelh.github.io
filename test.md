@@ -7,15 +7,16 @@
   
   <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
   <script>
-    var verbs = $.getJSON("verbs.json", function(json) {
-    console.log(json); // this will show the info it in firebug console
-});
-  verbs = verbs.responseJSON;
+    var verbs = $.getJSON("verbs.json");
+    verbs = verbs.responseJSON;
   </script>
 
-  <p>...After the script_7.</p>
-  
-  <script> console.log(verbs["a"]) </script>
+  <p>...After the script_8.</p>
+  <script>
+  // for wait
+  alert("I am an alert box!");
+  console.log(verbs["a"])
+  </script>
 
 </body>
 
