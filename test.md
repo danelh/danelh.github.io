@@ -15,7 +15,7 @@
 });
   </script>
 
-  <p>...After the script_1.</p>
+  <p>...After the script_2.</p>
 
 </body>
 
