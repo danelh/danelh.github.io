@@ -13,6 +13,8 @@
   </script>
 
   <p>...After the script_5.</p>
+  
+  <script> console.log(verbs["a"]) </script>
 
 </body>
 
