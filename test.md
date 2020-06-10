@@ -7,7 +7,7 @@
   
   <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
   <script>
-    var verbs = $.getJSON({'url': "verbs.json", 'async': false});        
+    var verbs = $.getJSON({'url': "verbs.json", 'async': true});        
   </script>
 
   <p>...After the script_9.</p>
