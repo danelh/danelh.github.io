@@ -10,11 +10,12 @@
     var verbs = $.getJSON("verbs.json", function(json) {
     console.log(json); // this will show the info it in firebug console
 });
+  verbs = verbs.responseJSON;
   </script>
 
-  <p>...After the script_6.</p>
+  <p>...After the script_7.</p>
   
-  <script> console.log(verbs[a]) </script>
+  <script> console.log(verbs["a"]) </script>
 
 </body>
 
