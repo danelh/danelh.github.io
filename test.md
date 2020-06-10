@@ -10,7 +10,7 @@
     var verbs = $.getJSON("verbs.json");    
   </script>
 
-  <p>...After the script_8.</p>
+  <p>...After the script_9.</p>
   <script>
   // for wait
   alert("I am an alert box!");
