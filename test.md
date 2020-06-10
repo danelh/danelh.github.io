@@ -12,9 +12,9 @@
 });
   </script>
 
-  <p>...After the script_5.</p>
+  <p>...After the script_6.</p>
   
-  <script> console.log(verbs["a"]) </script>
+  <script> console.log(verbs[a]) </script>
 
 </body>
 
