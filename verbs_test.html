@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html>
+
+<body>
+
+  <p>Before the script...</p>
+  
+  <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+  <script>
+	var all_verbs;
+    var all_verbs_loader = $.getJSON({'url': "https://raw.githubusercontent.com/danelh/danelh.github.io/master/verbs_new.json", 'async': true});
+	all_verbs_loader.done(function(){
+		all_verbs = all_verbs_loader.responseJSON
+		console.log("finish loading verbs");}
+	);
+  </script>
+  
+  <p id="demo" onclick="init()">Click me to change my text color.</p>
+
+  <script>
+  function init() {		
+	console.log(all_verbs);
+	console.log(all_verbs["amo"]);
+    document.getElementById("demo").text = "ffd"
+  }
+  </script>
+	
+  <p>...After the script_9.</p>
+  <script>
+  // for wait
+  //alert("I am an alert box!");
+//  verbs = verbs.responseJSON;
+//  console.log(verbs["a"])
+  </script>
+
+</body>
+
+</html>
