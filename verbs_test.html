@@ -8,6 +8,8 @@
   <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
   <script>
 	var all_verbs;
+	var selected_verbs = ["amo", "habeo", "capio", "audio", "aderro"];
+	var selected_inflections = ["indicative active perfect 1st singular", "perfect passive participle"]
     var all_verbs_loader = $.getJSON({'url': "https://raw.githubusercontent.com/danelh/danelh.github.io/master/verbs_new.json", 'async': true});
 	all_verbs_loader.done(function(){
 		all_verbs = all_verbs_loader.responseJSON
@@ -20,12 +22,46 @@
   <script>
   function init() {		
 	console.log(all_verbs);
-	console.log(all_verbs["amo"]);
-    document.getElementById("demo").text = "ffd"
+	var inflected = all_verbs["amo"][selected_inflections[0]];
+    document.getElementById("demo").innerHTML = inflected;
+	get_valid_mutations_dict();
+	
   }
   </script>
-	
-  <p>...After the script_9.</p>
+  
+  <script>
+  function select_mutation(){
+	 //arr[Math.floor(Math.random() * arr.length)]; 
+  }
+  
+  function is_mutation_valid(verb, inflection){
+	console.log("here!!");
+	console.log(all_verbs);	
+	dict_value = all_verbs[verb][inflection];
+	return (dict_value != null) && (dict_value != "--");
+  }
+  
+  function get_valid_mutations_dict(){
+	var mutation_dict = {};
+	var bad_mutations = []	
+	for (i = 0, v_len = selected_verbs.length; i < v_len; i++) {
+		for (j = 0, i_len = selected_inflections.length; j < i_len; j++) {
+			if (is_mutation_valid(selected_verbs[i], selected_inflections[j])){
+				mutation_dict[selected_verbs[i], selected_inflections[j]] = 1;
+			}
+			else{
+				bad_mutations.push([selected_verbs[i], selected_inflections[j]])				
+			}
+		}
+	}	
+	for (i = 0, b_len = bad_mutations.length; i < b_len; i++) {
+		console.log("bad mutation: " + bad_mutations[i]);
+	}
+	return mutation_dict;
+  }
+  
+  </script>
+    
   <script>
   // for wait
   //alert("I am an alert box!");
