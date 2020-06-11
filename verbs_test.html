@@ -3,7 +3,9 @@
 
 <body>
 
-  <p>Before the script...</p>
+  <p> (Enter) - mitte responsum <br>
+  (→) - iam scio et certus sum! nolite me iterum rogare!</p>
+  
   
   <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
   <script>
@@ -26,7 +28,7 @@
   
   <input type="text" id="user_answer">
   
-  <p id="res" >fdfdfdsfsd</p>
+  <p id="res" ></p>
   
   <script>
   function init() {		
@@ -36,11 +38,15 @@
 	mutation_dict = get_valid_mutations_dict();
 	
 	var user_answer_input = document.getElementById("user_answer");	
-	user_answer_input.addEventListener("keyup", function(event) {	
-	if (event.keyCode === 13) {
+	user_answer_input.addEventListener("keydown", function(event) {
+	var x = event.which || event.keyCode;
+	if (x === 13) {		
 		conclude_q();
 	}
-	else{
+	else if (x === 39){		
+		remove_mutation();
+	}
+	else{		
 		document.getElementById("res").innerHTML = "";
 	}
 	});	
@@ -55,16 +61,30 @@
   
   function conclude_q(){			
 	if (is_user_correct()){
-		new_text = "RIGHT";
+		color = "green";
 		mutation_dict[current_mutation] /= 2;
 	}
 	else{
-		new_text = "WRONG!";
+		color = "red";
 		mutation_dict[current_mutation] = 1;
 	}
-	document.getElementById("res").innerHTML = new_text;
+	document.getElementById("res").style.color = color;
+	document.getElementById("res").innerHTML = get_correct_answer_for_current_mutation();
 	
 	start_q();
+  }
+  
+  function remove_mutation(){
+	delete mutation_dict[current_mutation];
+	if (is_obj_empty(mutation_dict)){
+		document.getElementById("res").style.color = "green";
+		document.getElementById("res").innerHTML = "Mirabile! scis omnia. Elige alia verba/infleciones";
+	}
+	else{
+		document.getElementById("res").style.color = "gray";
+		document.getElementById("res").innerHTML = "Bene, iam scis hoc...sed allia?";
+		start_q();
+	}
   }
   
   function is_user_correct(){	
@@ -126,7 +146,13 @@
 		sum += prob[i];
 		if (r <= sum) return i;
 	 }
-}
+  }
+  
+  function is_obj_empty(_obj){
+	for (i in _obj){
+		return false;}
+	return true;
+  }
   
   </script>
     
