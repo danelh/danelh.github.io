@@ -9,6 +9,7 @@
   <script>
 	var all_verbs;
 	var mutation_dict;
+	var current_mutation;
 	var selected_verbs = ["amo", "habeo", "capio", "audio", "aderro"];
 	var selected_inflections = ["indicative active perfect 1st singular", "perfect passive participle"]
     var all_verbs_loader = $.getJSON({'url': "https://raw.githubusercontent.com/danelh/danelh.github.io/master/verbs_new.json", 'async': true});
@@ -19,9 +20,13 @@
 	);
   </script>
   
-  <p id="demo" onclick="init()">Click me to change my text color.</p>
+  <p id="demo" onclick="init()">Not support multiple answers like: amo perfect several tenses.</p>
 	
-  <p id="question" onclick="strat_q()">Click me to new q.</p>
+  <p id="question" onclick="start_q()">Click me to new q.</p>
+  
+  <input type="text" id="user_answer">
+  
+  <p id="res" >fdfdfdsfsd</p>
   
   <script>
   function init() {		
@@ -30,13 +35,51 @@
     document.getElementById("demo").innerHTML = inflected;
 	mutation_dict = get_valid_mutations_dict();
 	
+	var user_answer_input = document.getElementById("user_answer");	
+	user_answer_input.addEventListener("keyup", function(event) {	
+	if (event.keyCode === 13) {
+		conclude_q();
+	}
+	else{
+		document.getElementById("res").innerHTML = "";
+	}
+	});	
   }
   
-  function strat_q() {		
+  function start_q(){
+	document.getElementById("user_answer").value = "";	
 	console.log(mutation_dict);
-	var mutation = select_mutation()
-    document.getElementById("question").innerHTML = mutation;
+	current_mutation = select_mutation()
+    document.getElementById("question").innerHTML = current_mutation;	
+  }
+  
+  function conclude_q(){			
+	if (is_user_correct()){
+		new_text = "RIGHT";
+		mutation_dict[current_mutation] /= 2;
+	}
+	else{
+		new_text = "WRONG!";
+		mutation_dict[current_mutation] = 1;
+	}
+	document.getElementById("res").innerHTML = new_text;
 	
+	start_q();
+  }
+  
+  function is_user_correct(){	
+	user_answer = document.getElementById("user_answer").value;
+	correct_answer = get_correct_answer_for_current_mutation();
+	return (user_answer == correct_answer);
+  }
+  
+  function get_correct_answer_for_current_mutation(){
+	console.log(current_mutation);
+	dict_res = all_verbs[current_mutation[0]][current_mutation[1]];
+	if (dict_res){
+		return dict_res.split(",")[0].trim();
+	}
+    return dict_res;
   }
 
   
@@ -44,12 +87,10 @@
   
   <script>
   function select_mutation(){
-	 return select_weighted_random(mutation_dict);
+	 return select_weighted_random(mutation_dict).split(",");
   }
   
   function is_mutation_valid(verb, inflection){
-	//console.log("here!!");
-	//console.log(all_verbs);	
 	dict_value = all_verbs[verb][inflection];
 	return (dict_value != null) && (dict_value != "--");
   }
@@ -60,9 +101,7 @@
 	for (i = 0, v_len = selected_verbs.length; i < v_len; i++) {
 		for (j = 0, i_len = selected_inflections.length; j < i_len; j++) {
 			if (is_mutation_valid(selected_verbs[i], selected_inflections[j])){				
-				mutation_dict[selected_verbs[i], selected_inflections[j]] = 1;
-				// FIX: key as tuple not working
-				console.log(mutation_dict);
+				mutation_dict[[selected_verbs[i], selected_inflections[j]]] = 1;
 			}
 			else{
 				bad_mutations.push([selected_verbs[i], selected_inflections[j]])				
