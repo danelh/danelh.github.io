@@ -8,35 +8,48 @@
   <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
   <script>
 	var all_verbs;
+	var mutation_dict;
 	var selected_verbs = ["amo", "habeo", "capio", "audio", "aderro"];
 	var selected_inflections = ["indicative active perfect 1st singular", "perfect passive participle"]
     var all_verbs_loader = $.getJSON({'url': "https://raw.githubusercontent.com/danelh/danelh.github.io/master/verbs_new.json", 'async': true});
 	all_verbs_loader.done(function(){
 		all_verbs = all_verbs_loader.responseJSON
-		console.log("finish loading verbs");}
+		console.log("finish loading verbs");
+		init();}
 	);
   </script>
   
   <p id="demo" onclick="init()">Click me to change my text color.</p>
-
+	
+  <p id="question" onclick="strat_q()">Click me to new q.</p>
+  
   <script>
   function init() {		
 	console.log(all_verbs);
 	var inflected = all_verbs["amo"][selected_inflections[0]];
     document.getElementById("demo").innerHTML = inflected;
-	get_valid_mutations_dict();
+	mutation_dict = get_valid_mutations_dict();
 	
   }
+  
+  function strat_q() {		
+	console.log(mutation_dict);
+	var mutation = select_mutation()
+    document.getElementById("question").innerHTML = mutation;
+	
+  }
+
+  
   </script>
   
   <script>
   function select_mutation(){
-	 //arr[Math.floor(Math.random() * arr.length)]; 
+	 return select_weighted_random(mutation_dict);
   }
   
   function is_mutation_valid(verb, inflection){
-	console.log("here!!");
-	console.log(all_verbs);	
+	//console.log("here!!");
+	//console.log(all_verbs);	
 	dict_value = all_verbs[verb][inflection];
 	return (dict_value != null) && (dict_value != "--");
   }
@@ -46,8 +59,10 @@
 	var bad_mutations = []	
 	for (i = 0, v_len = selected_verbs.length; i < v_len; i++) {
 		for (j = 0, i_len = selected_inflections.length; j < i_len; j++) {
-			if (is_mutation_valid(selected_verbs[i], selected_inflections[j])){
+			if (is_mutation_valid(selected_verbs[i], selected_inflections[j])){				
 				mutation_dict[selected_verbs[i], selected_inflections[j]] = 1;
+				// FIX: key as tuple not working
+				console.log(mutation_dict);
 			}
 			else{
 				bad_mutations.push([selected_verbs[i], selected_inflections[j]])				
@@ -59,6 +74,20 @@
 	}
 	return mutation_dict;
   }
+  
+  function select_weighted_random(prob){  
+	var i=0;
+	var sum=0;
+	var w_sum = 0;
+	for (x in prob){
+		w_sum += prob[x];
+	}
+	var r=Math.random() * w_sum;
+	for (i in prob) {
+		sum += prob[i];
+		if (r <= sum) return i;
+	 }
+}
   
   </script>
     
