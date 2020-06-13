@@ -4,8 +4,24 @@
 <body>
 
   <p> (Enter) - mitte responsum <br>
-  (→) - iam scio et certus sum! nolite me iterum rogare!</p>
+  (→) - iam scio et certus sum! noli me iterum rogare!</p> 
+    
+  <p id="demo" onclick="init()">Not support multiple answers like: amo perfect several tenses.</p>
   
+  <label for="w3review">Enter verbs 1st sigular (example: amo)</label>
+  <textarea id="verbs_box" name="verbs_box" rows="4" cols="100"></textarea>
+  <button type="button" id="generate_random verbs" onclick=generate_random_verbs()>Generate_random_verbs</button>
+  <button type="button" id="validate verbs" onclick=get_verbs_from_input()>Validate verbs</button>
+  <button type="button" id="start_button" onclick=init_exam()>Start</button>
+  <p id="question">Click me to new q.</p>
+  
+  <input type="text" id="user_answer">
+  
+  <p id="res" ></p>
+  
+  <p id="verbs_error_p" name="verbs_error_p"></p>
+  <textarea id="verbs_error_box" name="verbs_error_box" rows="4" cols="50"></textarea>
+  <textarea id="inflections_error_box" name="inflections_error_box" rows="4" cols="100" readonly=true disabled=true></textarea>
   
   <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
   <script>
@@ -22,21 +38,9 @@
 	);
   </script>
   
-  <p id="demo" onclick="init()">Not support multiple answers like: amo perfect several tenses.</p>
-	
-  <p id="question" onclick="start_q()">Click me to new q.</p>
-  
-  <input type="text" id="user_answer">
-  
-  <p id="res" ></p>
-  
   <script>
   function init() {		
-	console.log(all_verbs);
-	var inflected = all_verbs["amo"][selected_inflections[0]];
-    document.getElementById("demo").innerHTML = inflected;
-	mutation_dict = get_valid_mutations_dict();
-	
+	console.log(all_verbs);	
 	var user_answer_input = document.getElementById("user_answer");	
 	user_answer_input.addEventListener("keydown", function(event) {
 	var x = event.which || event.keyCode;
@@ -50,6 +54,17 @@
 		document.getElementById("res").innerHTML = "";
 	}
 	});	
+  }
+  
+  function generate_random_verbs(){
+	generated_verbs = get_random_from_dict(all_verbs, 10);
+	document.getElementById("verbs_box").value = generated_verbs;
+	get_verbs_from_input();
+  }
+  
+  function init_exam(){
+	mutation_dict = get_valid_mutations_dict();
+	 start_q();
   }
   
   function start_q(){
@@ -74,11 +89,43 @@
 	start_q();
   }
   
+  function get_verbs_from_input(){
+	selected_verbs = [];
+	verbs_string = document.getElementById("verbs_box").value;
+	_verbs = verbs_string.split(",");
+	console.log(_verbs);
+	bad_verbs = []
+	for (i = 0; i < _verbs.length; i++) {
+		current_verb = _verbs[i].trim();
+		if (current_verb == ""){
+			continue;}
+		if (current_verb in all_verbs){
+			if (!(selected_verbs.includes(current_verb))) {
+				selected_verbs.push(current_verb);
+			}
+		}
+		else{
+			bad_verbs.push(current_verb);
+		}
+	}
+	
+	document.getElementById("verbs_box").value = selected_verbs;
+	
+	if (bad_verbs.length){	
+		document.getElementById("verbs_error_p").innerHTML = "those verbs are not in list, they might have more than one possible conjugation. Try search it manually from the list to add the conjugation";
+	}
+	else{
+		document.getElementById("verbs_error_p").innerHTML = "";
+	}
+	document.getElementById("verbs_error_box").innerHTML =  bad_verbs;
+	
+  }
+  
   function remove_mutation(){
 	delete mutation_dict[current_mutation];
 	if (is_obj_empty(mutation_dict)){
 		document.getElementById("res").style.color = "green";
-		document.getElementById("res").innerHTML = "Mirabile! scis omnia. Elige alia verba/infleciones";
+		document.getElementById("res").innerHTML = "Mirabile! Tu scis omnia. Elige alia verba/infleciones";
 	}
 	else{
 		document.getElementById("res").style.color = "gray";
@@ -117,7 +164,8 @@
   
   function get_valid_mutations_dict(){
 	var mutation_dict = {};
-	var bad_mutations = []	
+	var bad_mutations = [];
+	var bad_mutation_text = "";
 	for (i = 0, v_len = selected_verbs.length; i < v_len; i++) {
 		for (j = 0, i_len = selected_inflections.length; j < i_len; j++) {
 			if (is_mutation_valid(selected_verbs[i], selected_inflections[j])){				
@@ -130,7 +178,10 @@
 	}	
 	for (i = 0, b_len = bad_mutations.length; i < b_len; i++) {
 		console.log("bad mutation: " + bad_mutations[i]);
+		bad_mutation_text += "*verb \"" + bad_mutations[i][0] + "\" does not have \"" + bad_mutations[i][1] + "\" inflection\n";
 	}
+	
+	document.getElementById("inflections_error_box").innerHTML = bad_mutation_text;
 	return mutation_dict;
   }
   
@@ -152,6 +203,19 @@
 	for (i in _obj){
 		return false;}
 	return true;
+  }
+  
+  function get_random_from_dict(d, count){
+	var keys = Object.keys(d);
+	var selected = [];
+	while (selected.length < count){
+		current_selected = keys[Math.floor(Math.random() * keys.length)];
+		if (!selected.includes(current_selected)){
+			selected.push(current_selected);
+		}
+	}
+	
+    return selected;
   }
   
   </script>
