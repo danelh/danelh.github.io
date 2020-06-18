@@ -76,6 +76,9 @@
   
   <p id="res" ></p>
   
+  <label id="mutations_left" style="display: block;"></label>
+  <label id="answer_counter"></label>
+  
   <p id="verbs_error_p" name="verbs_error_p"></p>
   <textarea id="verbs_error_box" name="verbs_error_box" rows="4" cols="50"></textarea>
   <textarea id="inflections_error_box" name="inflections_error_box" rows="4" cols="100" readonly=true disabled=true></textarea>
@@ -116,7 +119,9 @@
 	var all_verbs, sorted_verbs;
 	var mutation_dict;
 	var current_mutation;
-	var selected_verbs = [];	
+	var selected_verbs = [];
+	var mistake_counter = 0;
+	var correct_counter = 0;
 	var sorted_verbs_loader = $.getJSON({'url': "https://raw.githubusercontent.com/danelh/danelh.github.io/master/verbs_sorted_by_freq.json", 'async': true});
     var all_verbs_loader = $.getJSON({'url': "https://raw.githubusercontent.com/danelh/danelh.github.io/master/verbs_new.json", 'async': true});
 	all_verbs_loader.done(function(){
@@ -232,7 +237,13 @@
 		alert("We have no valid inflection for those verbs. change something!");
 		return;
 	}
-	 start_q();
+	
+	set_mutations_left();
+	mistake_counter = 0;
+	correct_counter = 0;
+	set_answer_counter();
+	document.getElementById("res").innerHTML = "";
+	start_q();
   }
   
   function start_q(){
@@ -246,15 +257,23 @@
 	if (is_user_correct()){
 		color = "green";
 		mutation_dict[current_mutation] /= 2;
+		correct_counter += 1;
 	}
 	else{
 		color = "red";
 		mutation_dict[current_mutation] = 1;
-	}
+		mistake_counter += 1;
+	}	
+	
 	document.getElementById("res").style.color = color;
 	document.getElementById("res").innerHTML = get_correct_answer_for_current_mutation();
+	set_answer_counter();
 	
 	start_q();
+  }
+  
+  function set_answer_counter(){
+	document.getElementById("answer_counter").innerHTML = correct_counter + "\\" + (correct_counter+mistake_counter);
   }
   
   function add_verbs_to_box(new_verbs_to_add){
@@ -310,12 +329,24 @@
 	if (is_obj_empty(mutation_dict)){
 		document.getElementById("res").style.color = "green";
 		document.getElementById("res").innerHTML = "Mirabile! Tu scis omnia. Elige alia verba/infleciones";
+		end_exam();
 	}
 	else{
 		document.getElementById("res").style.color = "gray";
 		document.getElementById("res").innerHTML = "Bene, iam scis hoc...sed allia?";
+		set_mutations_left();
 		start_q();
 	}
+  }
+  
+  function set_mutations_left(){
+	ml = Object.keys(mutation_dict).length
+	document.getElementById("mutations_left").innerHTML = "mutations left: " + ml;
+  }
+  
+  function end_exam(){
+	document.getElementById("mutations_left").innerHTML = "";
+	//document.getElementById("answer_counter").innerHTML = "";
   }
   
   function is_user_correct(){	
