@@ -7,11 +7,18 @@
   <p> (Enter) - mitte responsum <br>
   (→) - iam scio et certus sum! noli me iterum rogare!</p> 
     
-  <p id="demo" onclick="init()">Not support multiple answers like: amo perfect several tenses \n verb sero has 3 options but 2 or 3rd (that are differnt in prinipal parts) .</p>
+  <p id="demo" onclick="init()">Not support multiple answers like: amo perfect several tenses \n verb sero has 3 options but 2 or 3rd (that are differnt in prinipal parts) but we take only one 3rd (you can't know which). may be the same conjuction like "levo", but might be different sero .</p>
   
   <h2>Search/Filter Dropdown</h2>
   <p>Click on the button to open the dropdown menu, and use the input field to search for a specific dropdown link.</p>
-
+  
+  <label for="level_select">Choose a level:</label>
+  <select id="level_select">
+	  <option value="0.1" selected="selected">Top 10% of verbs</option>
+	  <option value="0.25">Top 25% of verbs</option>
+	  <option value="0.5">Top 50% of verbs</option>
+	  <option value="1">All verbs</option>
+  </select>
   <input id="verb_select" list="verbs_datalist">
   <datalist id="verbs_datalist">
   </datalist>
@@ -33,14 +40,16 @@
   
   <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
   <script>
-	var all_verbs;
+	var all_verbs, sorted_verbs;
 	var mutation_dict;
 	var current_mutation;
 	var selected_verbs = ["amo", "habeo", "capio", "audio", "aderro"];
 	var selected_inflections = ["indicative active perfect 1st singular", "perfect passive participle"]
+	var sorted_verbs_loader = $.getJSON({'url': "https://raw.githubusercontent.com/danelh/danelh.github.io/master/verbs_sorted_by_freq.json", 'async': true});
     var all_verbs_loader = $.getJSON({'url': "https://raw.githubusercontent.com/danelh/danelh.github.io/master/verbs_new.json", 'async': true});
 	all_verbs_loader.done(function(){
 		all_verbs = all_verbs_loader.responseJSON
+		sorted_verbs = sorted_verbs_loader.responseJSON
 		console.log("finish loading verbs");
 		init();}
 	);	
@@ -48,7 +57,7 @@
   
   <script>
   function init() {		
-	console.log(all_verbs);	
+	console.log(sorted_verbs);	
 	var user_answer_input = document.getElementById("user_answer");	
 	user_answer_input.addEventListener("keydown", function(event) {
 	var x = event.which || event.keyCode;
@@ -88,13 +97,24 @@
   function add_verb_from_select(){
 	var verb_select = document.getElementById("verb_select");
 	var current_selected_verb = verb_select.value;
-	add_verbs_to_box([current_selected_verb]);
+	if (current_selected_verb != ""){
+		add_verbs_to_box([current_selected_verb]);
+		verb_select.value = "";
+	}
+  }
+  
+  function get_filtered_verbs_by_freq(){
+	ratio = parseFloat(document.getElementById("level_select").value);
+	number_of_verbs_in_pool = parseInt(ratio * sorted_verbs.length);
+	console.log(number_of_verbs_in_pool);
+	return sorted_verbs.slice(0, number_of_verbs_in_pool);
   }
   
   function generate_random_verbs(){
-	generated_verbs = get_random_from_dict(all_verbs, 10);
+	verbs_pool = get_filtered_verbs_by_freq();
+	generated_verbs = get_random_from_list(verbs_pool, 10);
 	add_verbs_to_box(generated_verbs);
-	//document.getElementById("verbs_box").value = generated_verbs;
+	document.getElementById("verbs_box").value = generated_verbs;
 	get_verbs_from_input();
   }
   
@@ -253,11 +273,10 @@
 	return true;
   }
   
-  function get_random_from_dict(d, count){
-	var keys = Object.keys(d);
+  function get_random_from_list(l, count){	
 	var selected = [];
 	while (selected.length < count){
-		current_selected = keys[Math.floor(Math.random() * keys.length)];
+		current_selected = l[Math.floor(Math.random() * l.length)];
 		if (!selected.includes(current_selected)){
 			selected.push(current_selected);
 		}
