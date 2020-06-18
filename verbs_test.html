@@ -1,13 +1,55 @@
 <!DOCTYPE HTML>
 <html>
+<style>
+#lstBox1, #lstBox2{
+  height:300px;
+  width:200px;
+}
 
+.approveTermsContainer{
+  display:flex;
+  justify-content:center;
+}
+
+.transferBtns {
+  margin-right: 30px;
+  margin-left: 30px;
+}
+
+.transferBtns{
+  float:left; 
+  align-self:center;
+}
+</style> 
 
 <body>
 
   <p> (Enter) - mitte responsum <br>
   (→) - iam scio et certus sum! noli me iterum rogare!</p> 
+  
+  <p>
+    Choose upgrades for your transport capsule.
+  </p>
+  
     
   <p id="demo" onclick="init()">Not support multiple answers like: amo perfect several tenses \n verb sero has 3 options but 2 or 3rd (that are differnt in prinipal parts) but we take only one 3rd (you can't know which). may be the same conjuction like "levo", but might be different sero .</p>
+  
+  <div class="approveTermsContainer">
+  <div class="newItems">
+  <b>All inflections:</b><br/>
+           <select multiple="multiple" id='lstBox1'>
+			</select>
+  </div>
+  <div class="transferBtns">
+	<input type='button' id='btnRight' value ='  >  '/>
+	<br/><input type='button' id='btnLeft' value ='  <  '/>
+  </div>
+  <div class="approvedItems">
+        <b>Selected inflections: </b><br/>
+        <select multiple="multiple" id='lstBox2'>
+        </select>
+  </div>
+  </div>
   
   <h2>Search/Filter Dropdown</h2>
   <p>Click on the button to open the dropdown menu, and use the input field to search for a specific dropdown link.</p>
@@ -39,12 +81,40 @@
   <textarea id="inflections_error_box" name="inflections_error_box" rows="4" cols="100" readonly=true disabled=true></textarea>
   
   <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+  
+  <script>
+  $(document).ready(function() {
+    $('#btnRight').click(function(e) {
+        var selectedOpts = $('#lstBox1 option:selected');
+        if (selectedOpts.length == 0) {
+            //alert("Nothing to move.");
+            e.preventDefault();
+        }
+
+        $('#lstBox2').append($(selectedOpts).clone());
+        $(selectedOpts).remove();
+        e.preventDefault();
+    });
+
+    $('#btnLeft').click(function(e) {
+        var selectedOpts = $('#lstBox2 option:selected');
+        if (selectedOpts.length == 0) {
+            //alert("Nothing to move.");
+            e.preventDefault();
+        }
+
+        $('#lstBox1').append($(selectedOpts).clone());
+        $(selectedOpts).remove();
+        e.preventDefault();
+    });
+  });
+  </script>
+  
   <script>
 	var all_verbs, sorted_verbs;
 	var mutation_dict;
 	var current_mutation;
-	var selected_verbs = ["amo", "habeo", "capio", "audio", "aderro"];
-	var selected_inflections = ["indicative active perfect 1st singular", "perfect passive participle"]
+	var selected_verbs = [];	
 	var sorted_verbs_loader = $.getJSON({'url': "https://raw.githubusercontent.com/danelh/danelh.github.io/master/verbs_sorted_by_freq.json", 'async': true});
     var all_verbs_loader = $.getJSON({'url': "https://raw.githubusercontent.com/danelh/danelh.github.io/master/verbs_new.json", 'async': true});
 	all_verbs_loader.done(function(){
@@ -72,7 +142,34 @@
 	}
 	});
 		
+	populate_inflections();
 	populate_verbs_in_select();
+  }
+  
+  function populate_inflections(){
+	default_inflections = ["indicative active perfect 1st singular", "perfect passive participle"]
+	all_possible_inflections = get_all_possible_inflections();	
+	//all_possible_inflections = all_possible_inflections.filter(function(value, index, arr){ return !default_inflections.includes(value);});
+	console.log(all_possible_inflections);
+	var from_box =  document.getElementById("lstBox1");
+	var to_box = document.getElementById("lstBox2");
+	for (i = 0; i < all_possible_inflections.length; i++) {
+		var cur_value = all_possible_inflections[i];
+		var opt = document.createElement("option");
+		opt.value= cur_value;
+		opt.innerHTML = cur_value;
+
+		if (default_inflections.includes(cur_value)){		
+			to_box.appendChild(opt);
+		}
+		else {
+			from_box.appendChild(opt);
+		}		
+	}
+  }
+  
+  function get_all_possible_inflections(){
+	return Object.keys(all_verbs["amo"]);
   }
   
   function populate_verbs_in_select(){
@@ -230,10 +327,21 @@
 	return (dict_value != null) && (dict_value != "--");
   }
   
+  function get_selected_inflection_from_box(){
+	var selected_inflections = [];
+	var to_box_options = document.getElementById("lstBox2").options;
+	for (i = 0; i < to_box_options.length; i++){
+		selected_inflections.push(to_box_options[i].value);
+	}
+	
+	return selected_inflections;
+  }
+  
   function get_valid_mutations_dict(){
 	var mutation_dict = {};
 	var bad_mutations = [];
 	var bad_mutation_text = "";
+	var selected_inflections = get_selected_inflection_from_box();
 	for (i = 0, v_len = selected_verbs.length; i < v_len; i++) {
 		for (j = 0, i_len = selected_inflections.length; j < i_len; j++) {
 			if (is_mutation_valid(selected_verbs[i], selected_inflections[j])){				
@@ -272,7 +380,7 @@
 		return false;}
 	return true;
   }
-  
+      
   function get_random_from_list(l, count){	
 	var selected = [];
 	while (selected.length < count){
