@@ -20,6 +20,69 @@
   float:left; 
   align-self:center;
 }
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #2196F3;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
 </style> 
 
 <body>
@@ -53,6 +116,16 @@
   
   <h2>Search/Filter Dropdown</h2>
   <p>Click on the button to open the dropdown menu, and use the input field to search for a specific dropdown link.</p>
+  
+  <div>
+  <label> Practice </label>
+  <label class="switch">	
+	<input id="is_exam_cb" type="checkbox" onchange=get_is_on_exam()>
+	<span class="slider round"></span>	
+  </label>
+  <label> Exam </label>
+  </div>
+
   
   <label for="level_select">Choose a level:</label>
   <select id="level_select">
@@ -122,6 +195,7 @@
 	var selected_verbs = [];
 	var mistake_counter = 0;
 	var correct_counter = 0;
+	var is_exam;
 	var sorted_verbs_loader = $.getJSON({'url': "https://raw.githubusercontent.com/danelh/danelh.github.io/master/verbs_sorted_by_freq.json", 'async': true});
     var all_verbs_loader = $.getJSON({'url': "https://raw.githubusercontent.com/danelh/danelh.github.io/master/verbs_new.json", 'async': true});
 	all_verbs_loader.done(function(){
@@ -151,6 +225,7 @@
 		
 	populate_inflections();
 	populate_verbs_in_select();
+	get_is_on_exam();
   }
   
   function populate_inflections(){
@@ -222,6 +297,10 @@
 	load_possible_mutations();
   }
   
+  function get_is_on_exam(){
+	is_exam = document.getElementById("is_exam_cb").checked;	
+  }
+  
   function init_exam(){
 	var selected_inflections = get_selected_inflection_from_box();
 	if (!selected_inflections.length){
@@ -244,13 +323,17 @@
 	set_answer_counter();
 	document.getElementById("res").innerHTML = "";
 	start_q();
-  }
+  }  
   
   function start_q(){
 	document.getElementById("user_answer").value = "";	
 	console.log(mutation_dict);
 	current_mutation = select_mutation()
     document.getElementById("question").innerHTML = current_mutation;	
+  }
+  
+  function is_exam_completed(){
+	return is_obj_empty(mutation_dict);
   }
   
   function conclude_q(){			
@@ -269,13 +352,28 @@
 	document.getElementById("res").innerHTML = get_correct_answer_for_current_mutation();
 	set_answer_counter();
 	
-	start_q();
+	if (is_exam){
+		delete mutation_dict[current_mutation];
+		set_mutations_left();
+	}
+	if (!is_exam_completed()){	
+		start_q();
+	}
+	else{
+		end_exam();
+	}
   }
   
   function set_answer_counter(){
 	document.getElementById("answer_counter").innerHTML = correct_counter + "\\" + (correct_counter+mistake_counter);
   }
   
+  function set_final_score(){
+	var final_score = parseInt(100* parseFloat(correct_counter) / parseFloat(mistake_counter+correct_counter));
+	document.getElementById("answer_counter").innerHTML = "Final score: " + final_score + "% [" + correct_counter + "/" + (correct_counter+mistake_counter) + "]";
+  }
+  
+
   function add_verbs_to_box(new_verbs_to_add){
 	verbs_box = document.getElementById("verbs_box")
 	verbs_string = verbs_box.value;
@@ -347,6 +445,9 @@
   function end_exam(){
 	document.getElementById("mutations_left").innerHTML = "";
 	//document.getElementById("answer_counter").innerHTML = "";
+	if (is_exam){
+		set_final_score();
+	}
   }
   
   function is_user_correct(){	
