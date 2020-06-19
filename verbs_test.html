@@ -191,7 +191,7 @@ input:checked + .slider:before {
   <script>
 	var all_verbs, sorted_verbs;
 	var mutation_dict;
-	var current_mutation;
+	var current_mutation, last_mutation;
 	var selected_verbs = [];
 	var mistake_counter = 0;
 	var correct_counter = 0;
@@ -317,6 +317,8 @@ input:checked + .slider:before {
 		return;
 	}
 	
+	current_mutation = -1;
+	last_mutation = -1;
 	set_mutations_left();
 	mistake_counter = 0;
 	correct_counter = 0;
@@ -336,7 +338,7 @@ input:checked + .slider:before {
 	return is_obj_empty(mutation_dict);
   }
   
-  function conclude_q(){			
+  function conclude_q(){
 	if (is_user_correct()){
 		color = "green";
 		mutation_dict[current_mutation] /= 2;
@@ -356,12 +358,30 @@ input:checked + .slider:before {
 		delete mutation_dict[current_mutation];
 		set_mutations_left();
 	}
-	if (!is_exam_completed()){	
+	if (!is_exam_completed()){
+		prevent_twice_in_a_row();
 		start_q();
 	}
 	else{
 		end_exam();
 	}
+  }
+  
+  function prevent_twice_in_a_row(){
+	var FACTOR = 100
+	
+	// in the current code, if it happened that the last is also the current, then the chances remain.
+	
+	// restore last
+	if (last_mutation in mutation_dict){
+		mutation_dict[last_mutation] *= FACTOR;
+	}
+	// avoid current
+	if (current_mutation in mutation_dict){
+		mutation_dict[current_mutation] /= FACTOR;
+	}
+	
+	last_mutation = current_mutation; 
   }
   
   function set_answer_counter(){
@@ -444,6 +464,7 @@ input:checked + .slider:before {
   
   function end_exam(){
 	document.getElementById("mutations_left").innerHTML = "";
+	document.getElementById("question").innerHTML = "Q";	
 	//document.getElementById("answer_counter").innerHTML = "";
 	if (is_exam){
 		set_final_score();
