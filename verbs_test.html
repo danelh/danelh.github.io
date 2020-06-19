@@ -159,7 +159,7 @@ input:checked + .slider:before {
   <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
   
   <script>
-  $(document).ready(function() {
+  $(document).ready(function() {	
     $('#btnRight').click(function(e) {
         var selectedOpts = $('#lstBox1 option:selected');
         if (selectedOpts.length == 0) {
@@ -189,18 +189,24 @@ input:checked + .slider:before {
   </script>
   
   <script>
-	var all_verbs, sorted_verbs;
+	var timerStart = Date.now();
+	var all_verbs, sorted_verbs, inflection_codes;
 	var mutation_dict;
 	var current_mutation, last_mutation;
 	var selected_verbs = [];
 	var mistake_counter = 0;
 	var correct_counter = 0;
 	var is_exam;
-	var sorted_verbs_loader = $.getJSON({'url': "https://raw.githubusercontent.com/danelh/danelh.github.io/master/verbs_sorted_by_freq.json", 'async': true});
-    var all_verbs_loader = $.getJSON({'url': "https://raw.githubusercontent.com/danelh/danelh.github.io/master/verbs_new.json", 'async': true});
-	all_verbs_loader.done(function(){
-		all_verbs = all_verbs_loader.responseJSON
-		sorted_verbs = sorted_verbs_loader.responseJSON
+	//var sorted_verbs_loader = $.getJSON({'url': "https://raw.githubusercontent.com/danelh/danelh.github.io/master/verbs_sorted_by_freq.json", 'async': true});
+    //var all_verbs_loader = $.getJSON({'url': "https://raw.githubusercontent.com/danelh/danelh.github.io/master/verbs_new.json", 'async': true});
+	var compact_loader = $.getJSON({'url': "https://raw.githubusercontent.com/danelh/danelh.github.io/master/compact.json", 'async': true});
+	compact_loader.done(function(){
+		//all_verbs = all_verbs_loader.responseJSON;
+		//sorted_verbs = sorted_verbs_loader.responseJSON;
+		compact_json = compact_loader.responseJSON;
+		all_verbs = compact_json["verbs"];
+		sorted_verbs = compact_json["freq_order"];
+		inflection_codes = compact_json["inf_code_to_text"]
 		console.log("finish loading verbs");
 		init();}
 	);	
@@ -226,11 +232,13 @@ input:checked + .slider:before {
 	populate_inflections();
 	populate_verbs_in_select();
 	get_is_on_exam();
+	console.log("Time until DOMready: ", Date.now()-timerStart);
   }
   
   function populate_inflections(){
-	default_inflections = ["indicative active perfect 1st singular", "perfect passive participle"]
-	all_possible_inflections = get_all_possible_inflections();	
+	default_inflections = ["18", "109"]
+	all_possible_inflections = get_all_possible_inflections();
+	console.log(all_possible_inflections);
 	//all_possible_inflections = all_possible_inflections.filter(function(value, index, arr){ return !default_inflections.includes(value);});
 	console.log(all_possible_inflections);
 	var from_box =  document.getElementById("lstBox1");
@@ -239,7 +247,7 @@ input:checked + .slider:before {
 		var cur_value = all_possible_inflections[i];
 		var opt = document.createElement("option");
 		opt.value= cur_value;
-		opt.innerHTML = cur_value;
+		opt.innerHTML = inflection_codes[cur_value];
 
 		if (default_inflections.includes(cur_value)){		
 			to_box.appendChild(opt);
@@ -330,8 +338,13 @@ input:checked + .slider:before {
   function start_q(){
 	document.getElementById("user_answer").value = "";	
 	console.log(mutation_dict);
-	current_mutation = select_mutation()
-    document.getElementById("question").innerHTML = current_mutation;	
+	current_mutation = select_mutation()    
+	dispaly_question();
+  }
+  
+  function dispaly_question(){
+	inflection_text = inflection_codes[current_mutation[1]];
+	document.getElementById("question").innerHTML = current_mutation[0] + ", " + inflection_text;	
   }
   
   function is_exam_completed(){
@@ -526,7 +539,7 @@ input:checked + .slider:before {
 	}	
 	for (i = 0, b_len = bad_mutations.length; i < b_len; i++) {
 		console.log("bad mutation: " + bad_mutations[i]);
-		bad_mutation_text += "*verb \"" + bad_mutations[i][0] + "\" does not have \"" + bad_mutations[i][1] + "\" inflection\n";
+		bad_mutation_text += "*verb \"" + bad_mutations[i][0] + "\" does not have \"" + inflection_codes[bad_mutations[i][1]] + "\" inflection\n";
 	}
 	
 	document.getElementById("inflections_error_box").innerHTML = bad_mutation_text;
