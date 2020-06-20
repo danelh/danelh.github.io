@@ -158,6 +158,18 @@ input:checked + .slider:before {
   <button type="button" id="generate_random verbs" onclick=generate_random_verbs()>Generate_random_verbs</button> 
   </div>
   
+  <button id="missing_collapsible_btn" type="button" class="collapsible">Missing Mutations (0)</button>
+  <div class="content">
+  <div width="20%">
+  <p id="verbs_error_p" name="verbs_error_p"></p>
+  <textarea id="verbs_error_box" name="verbs_error_box" rows="4" cols="50"></textarea>
+  </div>
+  <div width="80px">
+  <label> Verbs with missing inflections </label>
+  <textarea id="inflections_error_box" name="inflections_error_box" rows="4" cols="100" readonly=true disabled=true></textarea>
+  </div>
+  </div>
+  
   <div>
   <label> Practice </label>
   <label class="switch">	
@@ -176,11 +188,7 @@ input:checked + .slider:before {
   <p id="res" ></p>
   
   <label id="mutations_left" style="display: block;"></label>
-  <label id="answer_counter"></label>
-  
-  <p id="verbs_error_p" name="verbs_error_p"></p>
-  <textarea id="verbs_error_box" name="verbs_error_box" rows="4" cols="50"></textarea>
-  <textarea id="inflections_error_box" name="inflections_error_box" rows="4" cols="100" readonly=true disabled=true></textarea>
+  <label id="answer_counter"></label>  
   
   <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
   
@@ -485,6 +493,11 @@ input:checked + .slider:before {
 	document.getElementById("verbs_selection_collapsible_btn").innerHTML = new_text;
 		
   }
+  
+  function update_missing_collapsible_text(bad_mutations){
+	new_text = "Missing Mutataions (" + bad_mutations.length + ")";	
+	document.getElementById("missing_collapsible_btn").innerHTML = new_text;		
+  }
 
   
   function get_verbs_from_input(){
@@ -603,10 +616,13 @@ input:checked + .slider:before {
 	}	
 	for (i = 0, b_len = bad_mutations.length; i < b_len; i++) {
 		console.log("bad mutation: " + bad_mutations[i]);
-		bad_mutation_text += "*verb \"" + bad_mutations[i][0] + "\" does not have \"" + inflection_codes[bad_mutations[i][1]] + "\" inflection\n";
+		bad_mutation_text += "\"" + bad_mutations[i][0] + "\" does not have \"" + inflection_codes[bad_mutations[i][1]] + "\" inflection\n";
 	}
 	
+	update_missing_collapsible_text(bad_mutations);
+	
 	document.getElementById("inflections_error_box").innerHTML = bad_mutation_text;
+	missing_collapsible_btn
 	return mutation_dict;
   }
   
