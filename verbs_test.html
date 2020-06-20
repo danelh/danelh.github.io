@@ -6,11 +6,6 @@
   width:200px;
 }
 
-.approveTermsContainer{
-  display:flex;
-  justify-content:center;
-}
-
 .transferBtns {
   margin-right: 30px;
   margin-left: 30px;
@@ -19,6 +14,11 @@
 .transferBtns{
   float:left; 
   align-self:center;
+}
+
+.approveTermsContainer{
+  display:flex;
+  justify-content:center;
 }
 
 /* The switch - the box around the slider */
@@ -83,6 +83,29 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+.collapsible {
+  background-color: #777;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;  
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  border-style: solid;
+}
+
+.active, .collapsible:hover {
+  background-color: #555;
+} 
+.content {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1;
+ }
+
 </style> 
 
 <body>
@@ -97,6 +120,8 @@ input:checked + .slider:before {
     
   <p id="demo" onclick="init()">Not support multiple answers like: amo perfect several tenses \n verb sero has 3 options but 2 or 3rd (that are differnt in prinipal parts) but we take only one 3rd (you can't know which). may be the same conjuction like "levo", but might be different sero .</p>
   
+  <button id="inflections_selection_collapsible_btn" type="button" class="collapsible">Inflections Selection</button>
+  <div class="content">  
   <div class="approveTermsContainer">
   <div class="newItems">
   <b>All inflections:</b><br/>
@@ -113,20 +138,10 @@ input:checked + .slider:before {
         </select>
   </div>
   </div>
-  
-  <h2>Search/Filter Dropdown</h2>
-  <p>Click on the button to open the dropdown menu, and use the input field to search for a specific dropdown link.</p>
-  
-  <div>
-  <label> Practice </label>
-  <label class="switch">	
-	<input id="is_exam_cb" type="checkbox" onchange=get_is_on_exam()>
-	<span class="slider round"></span>	
-  </label>
-  <label> Exam </label>
   </div>
-
-  
+    
+  <button id="verbs_selection_collapsible_btn" type="button" class="collapsible">Verbs Selection</button>
+  <div class="content">
   <label for="level_select">Choose a level:</label>
   <select id="level_select">
 	  <option value="0.1" selected="selected">Top 10% of verbs</option>
@@ -141,7 +156,18 @@ input:checked + .slider:before {
   <label for="w3review">Enter verbs 1st sigular (example: amo)</label>
   <textarea id="verbs_box" name="verbs_box" rows="4" cols="100" onchange=load_possible_mutations()></textarea>
   <button type="button" id="generate_random verbs" onclick=generate_random_verbs()>Generate_random_verbs</button> 
-  <!--<button type="button" id="validate verbs" onclick=get_verbs_from_input()>Validate verbs</button>-->
+  </div>
+  
+  <div>
+  <label> Practice </label>
+  <label class="switch">	
+	<input id="is_exam_cb" type="checkbox" onchange=get_is_on_exam()>
+	<span class="slider round"></span>	
+  </label>
+  <label> Exam </label>
+  </div>
+
+  
   <button type="button" id="start_button" onclick=init_exam()>Start</button>
   <p id="question">Click me to new q.</p>
   
@@ -228,11 +254,28 @@ input:checked + .slider:before {
 		document.getElementById("res").innerHTML = "";
 	}
 	});
-		
+	
+	init_collapsibles();
 	populate_inflections();
 	populate_verbs_in_select();
 	get_is_on_exam();
 	console.log("Time until DOMready: ", Date.now()-timerStart);
+  }
+  
+  function init_collapsibles(){
+	var coll = document.getElementsByClassName("collapsible");
+	var i;
+	for (i = 0; i < coll.length; i++) {
+		coll[i].addEventListener("click", function() {
+			this.classList.toggle("active");
+			var content = this.nextElementSibling;
+			if (content.style.display === "block") {
+				content.style.display = "none";
+			} else {
+				content.style.display = "block";
+			}
+		});
+	}
   }
   
   function populate_inflections(){
@@ -256,6 +299,8 @@ input:checked + .slider:before {
 			from_box.appendChild(opt);
 		}		
 	}
+	
+	update_inflection_collapsible_text();
   }
   
   function get_all_possible_inflections(){
@@ -277,8 +322,11 @@ input:checked + .slider:before {
 	var x = event.which || event.keyCode;
 	if (x === 13) {		
 		add_verb_from_select();
+		load_possible_mutations();
 	}
 	});
+	
+	update_verbs_collapsible_text();
   }
   
   function add_verb_from_select(){
@@ -421,7 +469,23 @@ input:checked + .slider:before {
   function load_possible_mutations(){
 	get_verbs_from_input();
 	get_valid_mutations_dict();
+	update_inflection_collapsible_text();
+	update_verbs_collapsible_text();
   }
+  
+  function update_inflection_collapsible_text(){
+	var selected_inflections = get_selected_inflection_from_box();
+	new_text = "Inflections Selection (Selected: " + selected_inflections.length + ")";
+	document.getElementById("inflections_selection_collapsible_btn").innerHTML = new_text;	
+	
+  }
+  
+  function update_verbs_collapsible_text(){
+	new_text = "Verbs Selection (Selected: " + selected_verbs.length + ")";	
+	document.getElementById("verbs_selection_collapsible_btn").innerHTML = new_text;
+		
+  }
+
   
   function get_verbs_from_input(){
 	selected_verbs = [];
