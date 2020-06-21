@@ -18,7 +18,8 @@
 
 .approveTermsContainer{
   display:flex;
-  justify-content:center;  
+  justify-content:center;
+  padding: 5px;
 }
 
 /* The switch - the box around the slider */
@@ -44,7 +45,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #2196F3;
+  background-color: #ccc;
   -webkit-transition: .4s;
   transition: .4s;
 }
@@ -88,12 +89,13 @@ input:checked + .slider:before {
   background-color: #777;
   color: white;
   cursor: pointer;
-  padding: 18px;
+  padding: 18px;  
   width: 100%;  
   text-align: left;
   outline: none;
   font-size: 15px;
   border-style: solid;
+  border-color: white;
 }
 
 .active, .collapsible:hover {
@@ -139,13 +141,15 @@ input:checked + .slider:before {
 	float: left;
 	width: 27%;
 	height: 100%;
+	padding: 5px;
 
 }
 
 #selected_verbs_div{
 	float: right;
 	width: 70%;
-	height: 100%;	
+	height: 100%;
+	padding: 5px;	
 }
 
 #verbs_box{
@@ -182,6 +186,7 @@ input:checked + .slider:before {
     vertical-align: middle;
     text-align:center;
 	padding-right: 4px;
+	font-size: large;
 }
 
 #exam_label{
@@ -189,43 +194,38 @@ input:checked + .slider:before {
     vertical-align: middle;
     text-align:center;
 	padding-left: 4px;
+	font-size: large;
 }
 
 #mode_div{
-	width: 100%;
+	width: calc(100% - 44px);
 	height: 100%;
 	border-style: solid;
 	padding: 18px;
-	overflow: auto;
-	display: table;
+	#overflow: auto;
+	display: table;	
 	#vertical-align: middle;
+	outline: true;
 }
 
 #exam_parent_div{	
 	
 	display: table-cell;
     vertical-align: middle;
-	border-style: dashed;
+	#border-style: dashed;
 	width: 30%;
-	#overflow: auto;
-	#float:left;
 }
 
 #exam_div{
 	display: table;	
 	padding: 18px;	
 	float:left;	
-	#vertical-align: middle;	
-	#border-style: dashed;
 }
 
 #instruction_div{
 	display: table-cell;
-    #vertical-align: middle;
-	#text-align: center;
 	float:left;
-	#width:60%; 
-	border-style: dashed;
+	#border-style: dashed;
 }
 
 textarea{	
@@ -312,6 +312,7 @@ input[type=number]{
   </div>
   </div>
   
+  <div class="filler">
   <div id="mode_div">
   <div id="exam_parent_div">
   <div id="exam_div">
@@ -328,6 +329,7 @@ input[type=number]{
 	<p id="instruction_p"></p>
   </div>
   
+  </div>
   </div>
 
   <div id="start_btn_div">
@@ -538,14 +540,19 @@ input[type=number]{
   
   function update_instructions(){
 	p_element = document.getElementById("instruction_p");
+	mode_div = document.getElementById("mode_div");
+	var new_border_color = "";
 	var new_text = ""
 	if (is_exam){
 		new_text = "<h2> Exam Mode </h2> You will be asked only once for each mutation. Be carefull. <br> press (Enter) to submit your response. <br> Good Luck!"
+		new_border_color = "#2196F3";
 	}
 	else{
 		new_text = "<h2> Practice Mode </h2> Press (Enter) to submit your response. <br> Press (→) if you already know the required mutation and don't want to be asked again. <br> Click on the verb in question to learn the meaning and mutation of verb"
+		new_border_color = "#000000";		
 	}
 	p_element.innerHTML = new_text;
+	mode_div.style.borderColor = new_border_color;
   }
   
   function init_exam(){
@@ -814,7 +821,7 @@ input[type=number]{
 	update_missing_collapsible_text(bad_mutations);
 	
 	document.getElementById("inflections_error_box").innerHTML = bad_mutation_text;
-	missing_collapsible_btn
+	
 	return mutation_dict;
   }
   
