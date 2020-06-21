@@ -138,7 +138,7 @@ input:checked + .slider:before {
 #user_verb_selection_div{
 	float: left;
 	width: 27%;
-	height: 100%;	
+	height: 100%;
 
 }
 
@@ -191,11 +191,42 @@ input:checked + .slider:before {
 	padding-left: 4px;
 }
 
-#exam_div{
-	display: table;
+#mode_div{
+	width: 100%;
+	height: 100%;
+	border-style: solid;
 	padding: 18px;
+	overflow: auto;
+	display: table;
+	#vertical-align: middle;
 }
 
+#exam_parent_div{	
+	
+	display: table-cell;
+    vertical-align: middle;
+	border-style: dashed;
+	width: 30%;
+	#overflow: auto;
+	#float:left;
+}
+
+#exam_div{
+	display: table;	
+	padding: 18px;	
+	float:left;	
+	#vertical-align: middle;	
+	#border-style: dashed;
+}
+
+#instruction_div{
+	display: table-cell;
+    #vertical-align: middle;
+	#text-align: center;
+	float:left;
+	#width:60%; 
+	border-style: dashed;
+}
 
 textarea{	
     line-height: 1.5;
@@ -212,15 +243,9 @@ input[type=number]{
 
 <body>
 
-  <p> (Enter) - mitte responsum <br>
-  (→) - iam scio et certus sum! noli me iterum rogare!</p> 
+  <h1> Latin Verb Trainer </h1>
   
-  <p>
-    Choose upgrades for your transport capsule.
-  </p>
-  
-    
-  <p id="demo" onclick="init()">Not support multiple answers like: amo perfect several tenses \n verb sero has 3 options but 2 or 3rd (that are differnt in prinipal parts) but we take only one 3rd (you can't know which). may be the same conjuction like "levo", but might be different sero .</p>
+  <p> for detailed instruction click here" </p>
   
   <button id="inflections_selection_collapsible_btn" type="button" class="collapsible">Inflections Selection</button>
   <div class="content">  
@@ -287,20 +312,27 @@ input[type=number]{
   </div>
   </div>
   
+  <div id="mode_div">
+  <div id="exam_parent_div">
   <div id="exam_div">
-  <label id="practice_label" onclick=exam_div_clicked(0)> Practice </label>
-  <label class="switch">	
-	<input id="is_exam_cb" type="checkbox" onchange=get_is_on_exam()>
-	<span class="slider round"></span>	
-  </label>
-  <label id="exam_label" onclick=exam_div_clicked(1)> Exam </label>
+	  <label id="practice_label" onclick=exam_div_clicked(0)> Practice </label>
+	  <label class="switch">	
+		<input id="is_exam_cb" type="checkbox" onchange=get_is_on_exam()>
+		<span class="slider round"></span>	
+	  </label>
+	  <label id="exam_label" onclick=exam_div_clicked(1)> Exam </label>
   </div>
+  </div>  
+  
   <div id="instruction_div">
-  <p id="instruction_p"> </p>
+	<p id="instruction_p"></p>
+  </div>
+  
   </div>
 
-  
+  <div id="start_btn_div">
   <button type="button" id="start_button" onclick=init_exam()>Start</button>
+  </div>
   <p id="question">Click me to new q.</p>
   
   <input type="text" id="user_answer">
@@ -508,7 +540,7 @@ input[type=number]{
 	p_element = document.getElementById("instruction_p");
 	var new_text = ""
 	if (is_exam){
-		new_text = "<h2> Exam Mode </h2> You will be asked only once for each mutation. Be carefull. <br> press (Enter) to submit your response."
+		new_text = "<h2> Exam Mode </h2> You will be asked only once for each mutation. Be carefull. <br> press (Enter) to submit your response. <br> Good Luck!"
 	}
 	else{
 		new_text = "<h2> Practice Mode </h2> Press (Enter) to submit your response. <br> Press (→) if you already know the required mutation and don't want to be asked again. <br> Click on the verb in question to learn the meaning and mutation of verb"
@@ -559,7 +591,7 @@ input[type=number]{
   
   function get_wiki_link(v){	
 	clearn_verb = v.split("(")[0];
-	wiki_link ="https://en.wiktionary.org/wiki/" + v + "#Latin"; 
+	wiki_link ="https://en.wiktionary.org/wiki/" + clearn_verb + "#Latin"; 
 	return wiki_link;
   }
   
