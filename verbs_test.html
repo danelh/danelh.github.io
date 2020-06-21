@@ -137,7 +137,7 @@ input:checked + .slider:before {
 
 #user_verb_selection_div{
 	float: left;
-	width: 25%;
+	width: 27%;
 	height: 100%;	
 
 }
@@ -161,8 +161,19 @@ input:checked + .slider:before {
 	padding-top: 5px;
 	padding-bottom: 5px;
 	border-radius: 5px;
-
 }
+
+#auto_selection_div{
+	border-style: solid;
+	border-width: 1px;
+	padding-right: 5px;
+	padding-left: 5px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	border-radius: 5px;
+}
+
+
 
 
 textarea{	
@@ -209,26 +220,27 @@ textarea{
   <button id="verbs_selection_collapsible_btn" type="button" class="collapsible">Verbs Selection</button>
   <div class="content">
   <div id="user_verb_selection_div">
-  <label for="level_select">Choose a level:</label>
-  <select id="level_select">
-	  <option value="0.1" selected="selected">Top 10% of verbs</option>
-	  <option value="0.25">Top 25% of verbs</option>
-	  <option value="0.5">Top 50% of verbs</option>
-	  <option value="1">All verbs</option>
-  </select>
-  <div id=datalist_div>
-  <label> Select verb: </label>
-  <input id="verb_select" list="verbs_datalist" placeholder="example: amo">
-  <datalist id="verbs_datalist">
-  </datalist>  
-  </div>
-  
-  <button type="button" id="generate_random verbs" onclick=generate_random_verbs()>Generate_random_verbs</button> 
+	  <div id=datalist_div>
+		  <label> Manual Selection: </label>
+		  <input id="verb_select" list="verbs_datalist" placeholder="example: amo">
+		  <datalist id="verbs_datalist">
+		  </datalist>  
+	  </div>
+	  <div id="auto_selection_div">
+		  <label for="level_select">Choose a level:</label>
+		  <select id="level_select">
+			  <option value="0.1" selected="selected">Top 10% of verbs</option>
+			  <option value="0.25">Top 25% of verbs</option>
+			  <option value="0.5">Top 50% of verbs</option>
+			  <option value="1">All verbs</option>
+		  </select>	
+		  <button type="button" id="generate_random verbs" onclick=generate_random_verbs()>Generate_random_verbs</button>
+	  </div>
   </div>
   <div id="selected_verbs_div">
-  <label> Selected Verbs: </label>
-  <textarea id="verbs_box" name="verbs_box" rows="4" onchange=load_possible_mutations()></textarea>
-  </div>  
+	  <label> Selected Verbs: </label>
+	  <textarea id="verbs_box" name="verbs_box" rows="4" onchange=load_possible_mutations()></textarea>
+  </div>    
   </div>
   
   <button id="missing_collapsible_btn" type="button" class="collapsible">Missing Mutations (0)</button>
