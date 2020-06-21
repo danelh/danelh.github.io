@@ -183,6 +183,10 @@ textarea{
 	border: 1px solid #ccc;
 }
 
+input[type=number]{
+    width: 4em;
+}
+
 </style> 
 
 <body>
@@ -233,7 +237,9 @@ textarea{
 			  <option value="0.25">Top 25% of verbs</option>
 			  <option value="0.5">Top 50% of verbs</option>
 			  <option value="1">All verbs</option>
-		  </select>	
+		  </select>
+		  <label for="number_of_verbs_to_generate_input">Number of verbs to generate:</label>
+		  <input id="number_of_verbs_to_generate_input" type="number" value="10" oninput=number_of_verbs_input_chnage() maxlength="3" size="3">
 		  <button type="button" id="generate_random verbs" onclick=generate_random_verbs()>Generate_random_verbs</button>
 	  </div>
   </div>
@@ -443,12 +449,25 @@ textarea{
   
   function generate_random_verbs(){
 	verbs_pool = get_filtered_verbs_by_freq();
-	generated_verbs = get_random_from_list(verbs_pool, 10);
+	number_of_verbs_to_generate = document.getElementById("number_of_verbs_to_generate_input").value;
+	generated_verbs = get_random_from_list(verbs_pool, number_of_verbs_to_generate);
 	add_verbs_to_box(generated_verbs);
 	document.getElementById("verbs_box").value = generated_verbs;	
 	load_possible_mutations();
   }
   
+  function number_of_verbs_input_chnage(){
+	my_numeric = document.getElementById("number_of_verbs_to_generate_input");
+	MAX_VERBS_TO_GENERATE_VALUE = 500
+	MIN_VERBS_TO_GENERATE_VALUE = 1
+	if (my_numeric.value > MAX_VERBS_TO_GENERATE_VALUE){		
+		my_numeric.value = MAX_VERBS_TO_GENERATE_VALUE
+	}
+	if (my_numeric.value < MIN_VERBS_TO_GENERATE_VALUE){
+		my_numeric.value = MIN_VERBS_TO_GENERATE_VALUE
+	}
+  }
+    
   function get_is_on_exam(){
 	is_exam = document.getElementById("is_exam_cb").checked;	
   }
