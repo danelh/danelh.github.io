@@ -135,6 +135,13 @@ input:checked + .slider:before {
 
 }
 
+textarea{	
+    line-height: 1.5;
+    border-radius: 5px;
+	box-shadow: 1px 1px 1px #999;
+	border: 1px solid #ccc;
+}
+
 </style> 
 
 <body>
@@ -197,7 +204,7 @@ input:checked + .slider:before {
   </div>
   <div id="missing_verbs_div">
   <p id="verbs_error_p" name="verbs_error_p">Unrecognized verbs. [why?].</p>
-  <textarea id="verbs_error_box" name="verbs_error_box" rows="4" ></textarea> 
+  <textarea id="verbs_error_box" name="verbs_error_box" rows="4" readonly=true disabled=true></textarea> 
   </div>
   </div>
   </div>
@@ -648,7 +655,7 @@ input:checked + .slider:before {
 	}	
 	for (i = 0, b_len = bad_mutations.length; i < b_len; i++) {
 		console.log("bad mutation: " + bad_mutations[i]);
-		bad_mutation_text += "\"" + bad_mutations[i][0] + "\" does not have \"" + inflection_codes[bad_mutations[i][1]] + "\" inflection\n";
+		bad_mutation_text += " \"" + bad_mutations[i][0] + "\" does not have \"" + inflection_codes[bad_mutations[i][1]] + "\" inflection\n";
 	}
 	
 	update_missing_collapsible_text(bad_mutations);
