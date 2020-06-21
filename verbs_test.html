@@ -192,7 +192,8 @@ input:checked + .slider:before {
 }
 
 #exam_div{
-display: table;
+	display: table;
+	padding: 18px;
 }
 
 
@@ -293,6 +294,9 @@ input[type=number]{
 	<span class="slider round"></span>	
   </label>
   <label id="exam_label" onclick=exam_div_clicked(1)> Exam </label>
+  </div>
+  <div id="instruction_div">
+  <p id="instruction_p"> </p>
   </div>
 
   
@@ -496,7 +500,20 @@ input[type=number]{
   }
     
   function get_is_on_exam(){
-	is_exam = document.getElementById("is_exam_cb").checked;	
+	is_exam = document.getElementById("is_exam_cb").checked;
+	update_instructions();
+  }
+  
+  function update_instructions(){
+	p_element = document.getElementById("instruction_p");
+	var new_text = ""
+	if (is_exam){
+		new_text = "<h2> Exam Mode </h2> You will be asked only once for each mutation. Be carefull. <br> press (Enter) to submit your response."
+	}
+	else{
+		new_text = "<h2> Practice Mode </h2> Press (Enter) to submit your response. <br> Press (→) if you already know the required mutation and don't want to be asked again. <br> Click on the verb in question to learn the meaning and mutation of verb"
+	}
+	p_element.innerHTML = new_text;
   }
   
   function init_exam(){
@@ -534,7 +551,16 @@ input[type=number]{
   
   function dispaly_question(){
 	inflection_text = inflection_codes[current_mutation[1]];
-	document.getElementById("question").innerHTML = current_mutation[0] + ", " + inflection_text;	
+	wiki_link = get_wiki_link(current_mutation[0]);
+	verb_text = "<a href=\"" + wiki_link + "\" target=\"_blank\">" + current_mutation[0] + "</a>";
+	document.getElementById("question").innerHTML = verb_text + ", " + inflection_text;
+	console.log();
+  }
+  
+  function get_wiki_link(v){	
+	clearn_verb = v.split("(")[0];
+	wiki_link ="https://en.wiktionary.org/wiki/" + v + "#Latin"; 
+	return wiki_link;
   }
   
   function is_exam_completed(){
