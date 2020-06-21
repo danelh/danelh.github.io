@@ -25,7 +25,7 @@
 .switch {
   position: relative;
   display: inline-block;
-  width: 60px;
+  width: 70px;
   height: 34px;
 }
 
@@ -70,9 +70,9 @@ input:focus + .slider {
 }
 
 input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
+  -webkit-transform: translateX(36px);
+  -ms-transform: translateX(36px);
+  transform: translateX(36px);
 }
 
 /* Rounded sliders */
@@ -177,7 +177,23 @@ input:checked + .slider:before {
 	padding-top: 7px;
 }
 
+#practice_label{
+	display: table-cell;
+    vertical-align: middle;
+    text-align:center;
+	padding-right: 4px;
+}
 
+#exam_label{
+	display: table-cell;
+    vertical-align: middle;
+    text-align:center;
+	padding-left: 4px;
+}
+
+#exam_div{
+display: table;
+}
 
 
 textarea{	
@@ -270,13 +286,13 @@ input[type=number]{
   </div>
   </div>
   
-  <div>
-  <label> Practice </label>
+  <div id="exam_div">
+  <label id="practice_label" onclick=exam_div_clicked(0)> Practice </label>
   <label class="switch">	
 	<input id="is_exam_cb" type="checkbox" onchange=get_is_on_exam()>
 	<span class="slider round"></span>	
   </label>
-  <label> Exam </label>
+  <label id="exam_label" onclick=exam_div_clicked(1)> Exam </label>
   </div>
 
   
@@ -435,6 +451,11 @@ input[type=number]{
 	});
 	
 	update_verbs_collapsible_text();
+  }
+  
+  function exam_div_clicked(is_practice){		
+	document.getElementById("is_exam_cb").checked = is_practice;		
+	get_is_on_exam();
   }
   
   function add_verb_from_select(){
