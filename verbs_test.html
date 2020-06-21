@@ -105,6 +105,35 @@ input:checked + .slider:before {
   overflow: hidden;
   background-color: #f1f1f1;
  }
+ 
+#missing_div{
+	padding-bottom: 10px;	
+	overflow: hidden;
+}
+
+#missing_inflections_div{
+	float: left;
+	width: 70%;
+	height: 100%;	
+}
+
+#missing_verbs_div{
+	float: right;
+	width: 25%;
+	padding-right: 10px;
+	padding-left: 10px;
+}
+
+#inflections_error_box{
+	width: 100%;
+	height: 100%;	
+}
+
+#verbs_error_box{
+	width: 100%;
+	height: 100%;	
+
+}
 
 </style> 
 
@@ -153,20 +182,23 @@ input:checked + .slider:before {
   <datalist id="verbs_datalist">
   </datalist>
   
-  <label for="w3review">Enter verbs 1st sigular (example: amo)</label>
+  <label>Enter verbs 1st sigular (example: amo)</label>
   <textarea id="verbs_box" name="verbs_box" rows="4" cols="100" onchange=load_possible_mutations()></textarea>
   <button type="button" id="generate_random verbs" onclick=generate_random_verbs()>Generate_random_verbs</button> 
   </div>
   
   <button id="missing_collapsible_btn" type="button" class="collapsible">Missing Mutations (0)</button>
-  <div class="content">
-  <div width="20%">
-  <p id="verbs_error_p" name="verbs_error_p"></p>
-  <textarea id="verbs_error_box" name="verbs_error_box" rows="4" cols="50"></textarea>
+  <div class="content">  
+  <div id="missing_div">
+  <!-- <label> Verbs with missing inflections </label> -->
+  <div id="missing_inflections_div">
+  <p>Missing mutations:</p>
+  <textarea id="inflections_error_box" name="inflections_error_box" readonly=true disabled=true rows="4"></textarea>  
   </div>
-  <div width="80px">
-  <label> Verbs with missing inflections </label>
-  <textarea id="inflections_error_box" name="inflections_error_box" rows="4" cols="100" readonly=true disabled=true></textarea>
+  <div id="missing_verbs_div">
+  <p id="verbs_error_p" name="verbs_error_p">Unrecognized verbs. [why?].</p>
+  <textarea id="verbs_error_box" name="verbs_error_box" rows="4" ></textarea> 
+  </div>
   </div>
   </div>
   
@@ -522,12 +554,12 @@ input:checked + .slider:before {
 	
 	document.getElementById("verbs_box").value = selected_verbs;
 	
-	if (bad_verbs.length){	
-		document.getElementById("verbs_error_p").innerHTML = "those verbs are not in list, they might have more than one possible conjugation. Try search it manually from the list to add the conjugation";
-	}
-	else{
-		document.getElementById("verbs_error_p").innerHTML = "";
-	}
+	//if (bad_verbs.length){	
+	//	document.getElementById("verbs_error_p").innerHTML = "those verbs are not in list, they might have more than one possible conjugation. Try search it manually from the list to add the conjugation";
+	//}
+	//else{
+	//	document.getElementById("verbs_error_p").innerHTML = "";
+	//}
 	document.getElementById("verbs_error_box").innerHTML =  bad_verbs;
 	
   }
