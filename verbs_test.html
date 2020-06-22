@@ -473,6 +473,7 @@ input[type=number]{
 	populate_verbs_in_select();
 	get_is_on_exam();
 	console.log("Time until DOMready: ", Date.now()-timerStart);
+	selected_inflections_to_string();
   }
   
   function init_collapsibles(){
@@ -901,6 +902,38 @@ input[type=number]{
 	return mutation_dict;
   }
   
+  function selected_inflections_to_string(){	
+	var selected_inflections = get_selected_inflection_from_box();
+	selection_array = [];
+	all_possible_inflections = get_all_possible_inflections();
+	for (i=0; i<all_possible_inflections.length; i++){
+		if (selected_inflections.includes(i.toString())){
+			selection_array.push(true);
+		}
+		else{
+			selection_array.push(false);
+		}
+	}
+	
+	// added to 120
+	selection_array.push(false);
+	selection_array.push(false);
+	selection_array.push(false);
+	
+	code = boolean_array_to_string(selection_array);
+	console.log(code);
+	decoded = string_to_selected_inflections(code);
+	console.log(decoded == selection_array);
+  }
+  
+  function string_to_selected_inflections(s){
+	_selection_array = string_to_boolean_array(code);
+	_selection_array.pop();
+	_selection_array.pop();
+	-selection_array.pop();
+	return selection_array;
+  }
+  
   function select_weighted_random(prob){  
 	var i=0;
 	var sum=0;
@@ -931,6 +964,50 @@ input[type=number]{
 	}
 	
     return selected;
+  }
+  
+  function boolean_array_to_string(a){
+	c = chunkArray(a, 8);
+	res = "";	
+	for (i=0; i<c.length; ++i){
+		b = c[i].reduce((res, x) => res << 1 | x)
+		b = b.toString(16).padStart(2, '0');
+		res += b;
+	}
+	return res;
+  }
+  
+  function string_to_boolean_array(s){
+	c = chunkArray(s, 2)
+	res = []	
+	for (i=0; i<c.length; i++){
+		
+		b = parseInt(c[i], 16);		
+		a = [];
+		for (j=0; j<8; j++){					
+			a.push((b & 1) === 1)
+			b >>= 1
+		}
+		a.reverse();		
+		
+		res.push.apply(res, a)
+		
+	}	
+	return res;
+  }
+  
+  function chunkArray(myArray, chunk_size){
+    var index = 0;
+    var arrayLength = myArray.length;
+    var tempArray = [];
+    
+    for (index = 0; index < arrayLength; index += chunk_size) {
+        myChunk = myArray.slice(index, index+chunk_size);
+        // Do something if you want with the group
+        tempArray.push(myChunk);
+    }
+
+    return tempArray;
   }
   
   </script>
