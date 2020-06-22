@@ -611,6 +611,9 @@ input[type=number]{
 	correct_counter = 0;
 	set_answer_counter();
 	document.getElementById("res").innerHTML = "";
+	var user_answer_input = document.getElementById("user_answer");
+	user_answer_input.disabled = false;
+	user_answer_input.placeholder = "";
 	set_focus_on_user_answer();
 	start_q();
   } 
@@ -791,7 +794,10 @@ input[type=number]{
   
   function end_exam(reveresed=false){
 	document.getElementById("mutations_left").innerHTML = "";
-	document.getElementById("question").innerHTML = "Q";	
+	document.getElementById("question").innerHTML = "Q";
+	var user_answer_input = document.getElementById("user_answer");
+	user_answer_input.disabled = true;
+	user_answer_input.placeholder = "Click Start to begin";
 	//document.getElementById("answer_counter").innerHTML = "";		
 	if ((is_exam && !reveresed) || (!is_exam && reveresed)){
 		set_final_score();
