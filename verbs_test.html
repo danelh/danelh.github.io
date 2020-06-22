@@ -839,8 +839,7 @@ input[type=number]{
   function remove_mutation(){
 	delete mutation_dict[current_mutation];
 	if (is_obj_empty(mutation_dict)){
-		document.getElementById("res").style.color = "green";
-		document.getElementById("res").innerHTML = "Mirabile! You have them all! Select other verbs/inflections or try exam";
+		document.getElementById("res").style.color = "green";		
 		end_exam();
 		document.getElementById("res").innerHTML = "You have them all! Select other verbs/inflections or try exam";
 	}
