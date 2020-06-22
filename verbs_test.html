@@ -385,7 +385,8 @@ input[type=number]{
   
   <div id="full_exam_div">
   <div id="q_and_a">
-	  <p id="question"></p>  
+	  <p id="question"></p>
+	  <p id="consider"></p>
 	  <input type="text" id="user_answer">
 	  <p id="res"></p>
   </div>     
@@ -650,14 +651,16 @@ input[type=number]{
 	set_mutations_left();
 	mistake_counter = 0;
 	correct_counter = 0;
+	mutation_strike_counter = {}
 	set_answer_counter();
 	document.getElementById("res").innerHTML = "";
+	document.getElementById("consider").innerHTML = "";
 	var user_answer_input = document.getElementById("user_answer");
 	user_answer_input.disabled = false;
 	user_answer_input.placeholder = "";
 	set_focus_on_user_answer();
 	start_q();
-  } 
+  }  
 
   function set_focus_on_user_answer(){
 	document.getElementById("user_answer").focus();
@@ -665,9 +668,19 @@ input[type=number]{
   
   function start_q(){
 	document.getElementById("user_answer").value = "";	
+	document.getElementById("consider").innerHTML = "";
 	console.log(mutation_dict);
 	current_mutation = select_mutation()    
 	dispaly_question();
+	display_consider();
+  }
+  
+  function display_consider(){
+	if (current_mutation in mutation_strike_counter){
+		if (mutation_strike_counter[current_mutation] >= 3){
+			document.getElementById("consider").innerHTML = "You got this right 3 times in a row. cosider pressing (→)";
+		}
+	}
   }
   
   function dispaly_question(){
@@ -693,11 +706,18 @@ input[type=number]{
 		color = "green";
 		mutation_dict[current_mutation] /= 2;
 		correct_counter += 1;
+		if (current_mutation in mutation_strike_counter){
+			mutation_strike_counter[current_mutation] += 1;
+		}
+		else{
+			mutation_strike_counter[current_mutation] = 1;
+		}
 	}
 	else{
 		color = "red";
 		mutation_dict[current_mutation] = 1;
 		mistake_counter += 1;
+		mutation_strike_counter[current_mutation] = 0;
 	}	
 	
 	document.getElementById("res").style.color = color;
@@ -735,7 +755,7 @@ input[type=number]{
   }
   
   function set_answer_counter(){
-	document.getElementById("answer_counter").innerHTML = "Answers correct: " + correct_counter + "\\" + (correct_counter+mistake_counter);
+	document.getElementById("answer_counter").innerHTML = "Answers correct: " + correct_counter + "/" + (correct_counter+mistake_counter);
   }
   
   function set_final_score(){
@@ -820,12 +840,13 @@ input[type=number]{
 	delete mutation_dict[current_mutation];
 	if (is_obj_empty(mutation_dict)){
 		document.getElementById("res").style.color = "green";
-		document.getElementById("res").innerHTML = "Mirabile! Tu scis omnia. Elige alia verba/infleciones";
+		document.getElementById("res").innerHTML = "Mirabile! You have them all! Select other verbs/inflections or try exam";
 		end_exam();
+		document.getElementById("res").innerHTML = "You have them all! Select other verbs/inflections or try exam";
 	}
 	else{
 		document.getElementById("res").style.color = "gray";
-		document.getElementById("res").innerHTML = "Bene, iam scis hoc...sed allia?";
+		document.getElementById("res").innerHTML = "Okay, you know this one...but what about the others?";
 		set_mutations_left();
 		start_q();
 	}
@@ -838,11 +859,13 @@ input[type=number]{
   
   function end_exam(reveresed=false){
 	document.getElementById("mutations_left").innerHTML = "";
+	document.getElementById("res").innerHTML = "";
 	document.getElementById("question").innerHTML = "Question here";	
 	var user_answer_input = document.getElementById("user_answer");	
 	user_answer_input.disabled = true;
 	user_answer_input.value = "";
 	user_answer_input.placeholder = "Click Start to begin";	
+	document.getElementById("consider").innerHTML = "";
 	//document.getElementById("answer_counter").innerHTML = "";		
 	if ((is_exam && !reveresed) || (!is_exam && reveresed)){
 		set_final_score();
