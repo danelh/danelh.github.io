@@ -311,8 +311,7 @@ input[type=number]{
         <select multiple="multiple" id='lstBox2'>
         </select>
   </div>
-  </div>
-  <label id=inflection_code>  </label>
+  </div>  
   </div>
     
   <button id="verbs_selection_collapsible_btn" type="button" class="collapsible">Verbs Selection</button>
@@ -411,7 +410,7 @@ input[type=number]{
         $(selectedOpts).remove();
         e.preventDefault();
 		load_possible_mutations();
-		update_inflection_code();
+		update_url_params();
     });
 
     $('#btnLeft').click(function(e) {
@@ -425,7 +424,7 @@ input[type=number]{
         $(selectedOpts).remove();
         e.preventDefault();
 		load_possible_mutations();
-		update_inflection_code();
+		update_url_params();
     });
   });
   </script>
@@ -474,6 +473,7 @@ input[type=number]{
 	init_collapsibles();
 	populate_inflections();
 	populate_verbs_in_select();
+	load_verb_selection_params_from_url();
 	get_is_on_exam();
 	console.log("Time until DOMready: ", Date.now()-timerStart);
 	selected_inflections_to_string();
@@ -518,14 +518,19 @@ input[type=number]{
 		}		
 	}
 	
-	update_inflection_collapsible_text();
-	update_inflection_code();
+	update_inflection_collapsible_text();	
   }
   
-  function update_inflection_code(){
-	inflection_code = selected_inflections_to_string();	
-	console.log(inflection_code);
-	document.getElementById("inflection_code").innerHTML = inflection_code;
+  function update_url_params(){
+	inflection_code = selected_inflections_to_string();
+	nv = selected_number_of_verbs_to_string();
+	level = selected_level_to_string();
+	var url_string = window.location.href
+	var url = new URL(url_string);
+	url.searchParams.set("inflections", inflection_code);
+	url.searchParams.set("nv", nv);
+	url.searchParams.set("level", level);
+	window.history.pushState('page2', 'Title', url.toString());
   }
   
   function get_all_possible_inflections(){
@@ -579,6 +584,7 @@ input[type=number]{
 	verbs_pool = get_filtered_verbs_by_freq();
 	number_of_verbs_to_generate = document.getElementById("number_of_verbs_to_generate_input").value;
 	generated_verbs = get_random_from_list(verbs_pool, number_of_verbs_to_generate);
+	update_url_params();
 	add_verbs_to_box(generated_verbs);
 	document.getElementById("verbs_box").value = generated_verbs;	
 	load_possible_mutations();
@@ -708,9 +714,7 @@ input[type=number]{
 	}
 	else{		
 		end_exam();
-	}
-	
-	console.log("Here 2");
+	}	
   }
   
   function prevent_twice_in_a_row(){
@@ -775,7 +779,7 @@ input[type=number]{
   }
   
   function update_missing_collapsible_text(bad_mutations){
-	new_text = "Missing Mutataions (" + bad_mutations.length + ")";	
+	new_text = "Missing Mutations (" + bad_mutations.length + ")";	
 	document.getElementById("missing_collapsible_btn").innerHTML = new_text;		
   }
 
@@ -846,6 +850,9 @@ input[type=number]{
 	else{
 		document.getElementById("answer_counter").innerHTML = "";
 	}
+	
+	correct_counter=0;
+	mistake_counter=0;
   }
   
   function is_user_correct(){	
@@ -913,6 +920,39 @@ input[type=number]{
 	return mutation_dict;
   }
   
+  function load_verb_selection_params_from_url(){
+	number_of_verbs = load_number_of_verbs_from_url();
+	console.log(number_of_verbs);
+	if (number_of_verbs){
+		document.getElementById("number_of_verbs_to_generate_input").value = number_of_verbs;
+		number_of_verbs_input_chnage();
+	}
+	level = load_level_from_url();
+	console.log(level);
+	if (level){
+		document.getElementById("level_select").value = level;
+		current_level = document.getElementById("level_select").value;
+		if (level != current_level){
+			document.getElementById("level_select").selectedIndex =0;			
+		}
+	}
+	
+	if (level && number_of_verbs){
+		generate_random_verbs();
+	}
+  }
+  
+  function selected_level_to_string(){
+	var level_string = document.getElementById("level_select").value;
+	return level_string;
+  }
+  
+  function selected_number_of_verbs_to_string(){
+	var number_of_verbs = document.getElementById("number_of_verbs_to_generate_input").value.toString();	
+	return number_of_verbs;
+
+  }
+  
   function selected_inflections_to_string(){	
 	var selected_inflections = get_selected_inflection_from_box();
 	selection_array = [];
@@ -951,12 +991,26 @@ input[type=number]{
 	return selected_inflections;
   }
   
+  function load_number_of_verbs_from_url(){
+	nv = get_param_from_url("nv");
+	if (nv){
+		return (parseInt(nv));
+	}
+	else{
+		return 0;
+	}
+  }
+  
+  function load_level_from_url(){
+	level = get_param_from_url("level");
+	return level;
+  }
+  
   function load_default_inflections(){
-    // no " - it is important.
-	inflection_code = get_param_from_url("inflections").toString();	
-	console.log(inflection_code);
+	inflection_code = get_param_from_url("inflections");
 	if (inflection_code)
 	{
+		inflection_code = get_param_from_url("inflections").toString();	
 		return string_to_selected_inflections(inflection_code);
 	}
 	else{
