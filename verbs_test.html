@@ -312,6 +312,7 @@ input[type=number]{
         </select>
   </div>
   </div>
+  <label id=inflection_code>  </label>
   </div>
     
   <button id="verbs_selection_collapsible_btn" type="button" class="collapsible">Verbs Selection</button>
@@ -410,6 +411,7 @@ input[type=number]{
         $(selectedOpts).remove();
         e.preventDefault();
 		load_possible_mutations();
+		update_inflection_code();
     });
 
     $('#btnLeft').click(function(e) {
@@ -423,6 +425,7 @@ input[type=number]{
         $(selectedOpts).remove();
         e.preventDefault();
 		load_possible_mutations();
+		update_inflection_code();
     });
   });
   </script>
@@ -493,7 +496,8 @@ input[type=number]{
   }
   
   function populate_inflections(){
-	default_inflections = ["18", "109"]
+	//default_inflections = ["18", "109"]
+	default_inflections = load_default_inflections();
 	all_possible_inflections = get_all_possible_inflections();
 	console.log(all_possible_inflections);
 	//all_possible_inflections = all_possible_inflections.filter(function(value, index, arr){ return !default_inflections.includes(value);});
@@ -515,6 +519,13 @@ input[type=number]{
 	}
 	
 	update_inflection_collapsible_text();
+	update_inflection_code();
+  }
+  
+  function update_inflection_code(){
+	inflection_code = selected_inflections_to_string();	
+	console.log(inflection_code);
+	document.getElementById("inflection_code").innerHTML = inflection_code;
   }
   
   function get_all_possible_inflections(){
@@ -920,18 +931,44 @@ input[type=number]{
 	selection_array.push(false);
 	selection_array.push(false);
 	
-	code = boolean_array_to_string(selection_array);
-	console.log(code);
-	decoded = string_to_selected_inflections(code);
-	console.log(decoded == selection_array);
+	code = boolean_array_to_string(selection_array);	
+	//decoded = string_to_selected_inflections(code);
+	return code;
   }
   
   function string_to_selected_inflections(s){
-	_selection_array = string_to_boolean_array(code);
+	_selection_array = string_to_boolean_array(s);
 	_selection_array.pop();
 	_selection_array.pop();
-	-selection_array.pop();
-	return selection_array;
+	_selection_array.pop();	
+	selected_inflections = [];
+	for (i=0; i<_selection_array.length; i++){
+		if (_selection_array[i]){
+			selected_inflections.push(i.toString());
+		}
+	}
+	console.log(selected_inflections);
+	return selected_inflections;
+  }
+  
+  function load_default_inflections(){
+    // no " - it is important.
+	inflection_code = get_param_from_url("inflections").toString();	
+	console.log(inflection_code);
+	if (inflection_code)
+	{
+		return string_to_selected_inflections(inflection_code);
+	}
+	else{
+		return [];
+	}
+  }
+  
+  function get_param_from_url(param){
+	var url_string = window.location.href
+	var url = new URL(url_string);
+	var c = url.searchParams.get(param);
+	return c;
   }
   
   function select_weighted_random(prob){  
