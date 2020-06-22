@@ -256,6 +256,25 @@ input:checked + .slider:before {
 	font-size: 24px;
 }
 
+#res{
+	font-size: 24px;
+}
+
+#full_exam_div{
+	width: 100%;
+	overflow: hidden;	
+}
+
+#q_and_a{
+	width: 40em;
+	float: left;	
+}
+
+#exam_status{
+	margin-left: 3em;
+	font-size: 24px;
+}
+
 textarea{	
     line-height: 1.5;
     border-radius: 5px;
@@ -363,14 +382,18 @@ input[type=number]{
   <div id="start_btn_div">
   <button type="button" id="start_button" onclick=init_exam()>Start</button>
   </div>
-  <p id="question">Click me to new q.</p>
   
-  <input type="text" id="user_answer">
-  
-  <p id="res" ></p>
-  
-  <label id="mutations_left" style="display: block;"></label>
-  <label id="answer_counter"></label>  
+  <div id="full_exam_div">
+  <div id="q_and_a">
+	  <p id="question"></p>  
+	  <input type="text" id="user_answer">
+	  <p id="res"></p>
+  </div>     
+  <div id="exam_status">
+	  <p id="mutations_left"></p>
+	  <p id="answer_counter"></p>  
+  </div>
+  </div>
   
   <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
   
@@ -671,9 +694,11 @@ input[type=number]{
 		prevent_twice_in_a_row();
 		start_q();
 	}
-	else{
+	else{		
 		end_exam();
 	}
+	
+	console.log("Here 2");
   }
   
   function prevent_twice_in_a_row(){
@@ -694,12 +719,15 @@ input[type=number]{
   }
   
   function set_answer_counter(){
-	document.getElementById("answer_counter").innerHTML = correct_counter + "\\" + (correct_counter+mistake_counter);
+	document.getElementById("answer_counter").innerHTML = "Answers correct: " + correct_counter + "\\" + (correct_counter+mistake_counter);
   }
   
   function set_final_score(){
-	var final_score = parseInt(100* parseFloat(correct_counter) / parseFloat(mistake_counter+correct_counter));
-	document.getElementById("answer_counter").innerHTML = "Final score: " + final_score + "% [" + correct_counter + "/" + (correct_counter+mistake_counter) + "]";
+	var total_answers = parseFloat(mistake_counter+correct_counter);
+	if (total_answers){
+		var final_score = parseInt(100* parseFloat(correct_counter) / parseFloat(mistake_counter+correct_counter));
+		document.getElementById("answer_counter").innerHTML = "Final score: " + final_score + "% [" + correct_counter + "/" + (correct_counter+mistake_counter) + "]";
+	}
   }
   
 
@@ -789,18 +817,22 @@ input[type=number]{
   
   function set_mutations_left(){
 	ml = Object.keys(mutation_dict).length
-	document.getElementById("mutations_left").innerHTML = "mutations left: " + ml;
+	document.getElementById("mutations_left").innerHTML = "Mutations left: " + ml;
   }
   
   function end_exam(reveresed=false){
 	document.getElementById("mutations_left").innerHTML = "";
-	document.getElementById("question").innerHTML = "Q";
-	var user_answer_input = document.getElementById("user_answer");
+	document.getElementById("question").innerHTML = "Question here";	
+	var user_answer_input = document.getElementById("user_answer");	
 	user_answer_input.disabled = true;
-	user_answer_input.placeholder = "Click Start to begin";
+	user_answer_input.value = "";
+	user_answer_input.placeholder = "Click Start to begin";	
 	//document.getElementById("answer_counter").innerHTML = "";		
 	if ((is_exam && !reveresed) || (!is_exam && reveresed)){
 		set_final_score();
+	}
+	else{
+		document.getElementById("answer_counter").innerHTML = "";
 	}
   }
   
