@@ -1,1 +1,8 @@
 theme: jekyll-theme-cayman
+title: Res Latinae
+description: My site description
+url: https://danelh.github.io/
+author: MyName
+plugins:
+  - jekyll-seo-tag
+google_analytics: UA-170550843-1
