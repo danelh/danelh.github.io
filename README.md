@@ -5,3 +5,4 @@
 - [ ] in Exam mdoe: don't delete last correct answer when exam completed.
 - [ ] support full range frequency in url-params.
 - [ ] differnt colors in Q: for mood, tense, body
+- [ ] add timer on start
