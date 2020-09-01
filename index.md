@@ -3,6 +3,8 @@ description: ""
 ---
 # Res Latinae
 
+### [Latin Collocations](/collocations)
+
 ### [Latin Verb Trainer](/verbs)
 
 ### [Latin Noun Trainer](/nouns)
