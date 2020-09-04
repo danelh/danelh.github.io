@@ -3,5 +3,6 @@ title: Res Latinae
 url: https://danelh.github.io/
 author: MyName
 plugins:
+  - jekyll-sitemap
   - jekyll-seo-tag
 google_analytics: UA-170550843-1
