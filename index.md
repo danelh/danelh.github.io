@@ -11,6 +11,8 @@ description: ""
 
 ### [Latin Proverbs from L&S Dictionary](https://www.amazon.com/dp/B08JD3KZNY)
 
+### [Latin Crosswords](https://www.amazon.com/dp/B08LNQ7NQT)
+
 ### [Blog](/latin_blog)
 
 ### [About (contact me)](about)
