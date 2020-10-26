@@ -1,7 +1,9 @@
 ---
 description: ""
 ---
-# Res Latinae - Ad Discendam Linguam Latinam. We create tools in order to promote Latin language learning.
+# Res Latinae 
+
+## Ad Discendam Linguam Latinam. We create tools in order to promote Latin language learning.
 
 ### [Latin Collocations](/collocations)
 
