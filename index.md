@@ -11,7 +11,7 @@ description: ""
 
 ### [Latin Noun Trainer](/nouns)
 
-### [Latin Proverbs from L&S Dictionary](https://www.amazon.com/dp/B08JD3KZNY)
+### [Latin Proverbs from L&S Dictionary](/el_lewis_and_short)
 
 ### [Latin Crosswords](https://www.amazon.com/dp/B08LNQ7NQT)
 
