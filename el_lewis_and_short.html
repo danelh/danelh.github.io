@@ -11,6 +11,7 @@
 </script>
   </head>
 <body>
+<a id="my_link" href="https://www.amazon.com/dp/B08JD3KZNY" onclick="captureOutboundLink('https://www.amazon.com/dp/B08JD3KZNY'); return false;"></a>
 <script>
 /**
 * Function that captures a click on an outbound link in Analytics.
@@ -26,7 +27,6 @@ var captureOutboundLink = function(url) {
 }
 document.getElementById('my_link').click();
 </script>
-<a id="my_link" href="https://www.amazon.com/dp/B08JD3KZNY" onclick="captureOutboundLink('https://www.amazon.com/dp/B08JD3KZNY'); return false;"></a>
 </body>
 </html> 
 
