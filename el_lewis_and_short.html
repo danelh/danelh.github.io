@@ -22,7 +22,10 @@
 var captureOutboundLink = function(url) {
    ga('send', 'event', 'outbound', 'click', url, {
      'transport': 'beacon',
-     'hitCallback': function(){document.location = url;}
+     'hitCallback': function(){
+       var i, j;
+       for (i=0; i < 100000; i=i+1;){j += 1;};
+       document.location = url;}
    });
 }
 document.getElementById('my_link').click();
