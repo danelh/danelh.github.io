@@ -15,6 +15,6 @@ description: ""
 
 ### [Latin Crosswords](https://www.amazon.com/dp/B08LNQ7NQT)
 
-### [Blog](/latin_blog)
+### [Blog](/latin_blog/)
 
 ### [About (contact me)](about)
