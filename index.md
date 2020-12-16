@@ -5,11 +5,11 @@ description: ""
 
 ## Ad Discendam Linguam Latinam. We create tools in order to promote Latin language learning.
 
-### [Latin Collocations](/collocations)
+### [Latin Collocations](/collocations/)
 
-### [Latin Verb Trainer](/verbs)
+### [Latin Verb Trainer](/verbs/)
 
-### [Latin Noun Trainer](/nouns)
+### [Latin Noun Trainer](/nouns/)
 
 ### [Latin Proverbs from L&S Dictionary](/el_lewis_and_short.html)
 
