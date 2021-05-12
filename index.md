@@ -21,4 +21,6 @@ description: ""
 
 ### [Blog](/latin_blog/)
 
+### [Revered Lewis & Short Dictionary (English to Latin)](rls.html)
+
 ### [About (contact me)](about)
