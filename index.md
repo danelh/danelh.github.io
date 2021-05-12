@@ -17,10 +17,10 @@ description: ""
 
 ### [Book of Genesis: Parallel Latin-Latin: Sebastian Castellio's and the Vulgate](https://www.amazon.com/dp/B08RDYQNPN)
 
-### [Latin Crosswords](https://www.amazon.com/dp/B08LNQ7NQT)
-
 ### [Blog](/latin_blog/)
 
-### [Revered Lewis & Short Dictionary (English to Latin)](rls.html)
+### [Reversed Lewis & Short Dictionary (English to Latin)](rls.html)
+
+### [Latin Crosswords](https://www.amazon.com/dp/B08LNQ7NQT)
 
 ### [About (contact me)](about)
