@@ -39,12 +39,14 @@
   </style>
 </head>
 <body>
-  <h1>Latin-English Paragraph Viewer</h1>
-  <div id="container"></div>
-  <div class="buttons">
+  <h1>Epistulae morales ad Lucilium</h1>
+    <div class="buttons">
     <button onclick="previousParagraph()">Previous</button>
     <button onclick="nextParagraph()">Next</button>
+      <button onclick="randomParagraph()">Random</button>
   </div>
+
+  <div id="container"></div>
 
   <script>
     var currentParagraph = 0;
@@ -92,6 +94,14 @@
       }
       displayParagraph(currentParagraph);
     }
+    function randomParagraph() {
+      currentParagraph = Math.floor(Math.random() * paragraphData.length);
+      if (currentParagraph < 0) {
+        currentParagraph = paragraphData.length - 1;
+      }
+      displayParagraph(currentParagraph);
+    }
+
   </script>
 </body>
 </html>
