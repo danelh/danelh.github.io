@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Latin-English Paragraph Viewer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.latin {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.english {
+  margin-top: 10px;
+}
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+    }
+
+    button {
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Epistulae morales ad Lucilium</h1>
+    <div class="buttons">
+    <button onclick="previousParagraph()">Previous</button>
+    <button onclick="nextParagraph()">Next</button>
+      <button onclick="randomParagraph()">Random</button>
+  </div>
+
+  <div id="container"></div>
+
+  <script>
+    var currentParagraph = 0;
+    var paragraphData = [];
+
+    // Fetch JSON data from the URL
+    fetch('https://raw.githubusercontent.com/danelh/danelh.github.io/master/seneca_combined.json')
+      .then(response => response.json())
+      .then(data => {
+        paragraphData = data;
+        displayParagraph(currentParagraph);
+      });
+
+    function displayParagraph(index) {
+      var container = document.getElementById('container');
+      container.innerHTML = '';
+
+      var latinText = paragraphData[index].lat;
+      var englishText = paragraphData[index].eng;
+
+      var latinDiv = document.createElement('div');
+      latinDiv.className = 'latin';
+      latinDiv.textContent = latinText;
+
+      var englishDiv = document.createElement('div');
+      englishDiv.className = 'english';
+      englishDiv.textContent = englishText;
+
+      container.appendChild(latinDiv);
+      container.appendChild(englishDiv);
+    }
+
+    function nextParagraph() {
+      currentParagraph++;
+      if (currentParagraph >= paragraphData.length) {
+        currentParagraph = 0;
+      }
+      displayParagraph(currentParagraph);
+    }
+
+    function previousParagraph() {
+      currentParagraph--;
+      if (currentParagraph < 0) {
+        currentParagraph = paragraphData.length - 1;
+      }
+      displayParagraph(currentParagraph);
+    }
+    function randomParagraph() {
+      currentParagraph = Math.floor(Math.random() * paragraphData.length);
+      if (currentParagraph < 0) {
+        currentParagraph = paragraphData.length - 1;
+      }
+      displayParagraph(currentParagraph);
+    }
+
+  </script>
+</body>
+</html>

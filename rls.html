@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<style>
+input[type="text"]{
+  font-size: 20px;
+  width: 50%;
+}
+button{
+  font-size: 20px;
+}
+
+</style>
+<h1>Reverse Lewis & Short dictionary</h1>
+  <input type="text" placeholder="query" name="search", id="q" autofocus >
+  <button type="submit " id=sb onclick="go_to_site()">Search!</button>
+  <br></br>
+  <a href="#" target="_blank" id="to_google"></a>
+</body>
+</html>
+
+<script>
+
+// Get the input field
+var input = document.getElementById("q");
+
+// Execute a function when the user releases a key on the keyboard
+input.addEventListener("keyup", function(event) {
+  // Number 13 is the "Enter" key on the keyboard
+  if (event.keyCode === 13) {
+    // Cancel the default action, if needed
+    event.preventDefault();
+    // Trigger the button element with a click
+    document.getElementById("sb").click();
+  }
+});
+
+function get_search_url(q){
+	var google_q =  q + ' "Charlton T. Lewis, Charles Short, A Latin Dictionary" site:http://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.04.0059:';
+	return "https://www.google.com/search?q=" + google_q;
+};
+
+function go_to_site() {
+  var q = document.getElementById("q").value;
+  console.log(q);
+  var search_url = get_search_url(q);
+  document.getElementById("to_google").href = search_url;
+  document.getElementById('to_google').click();
+};
+</script>
+

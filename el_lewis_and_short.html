@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-170550843-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-170550843-1');
+</script>
+  </head>
+<body>
+<a id="my_link" href="https://www.amazon.com/dp/B08JD3KZNY" onclick="captureOutboundLink('https://www.amazon.com/dp/B08JD3KZNY'); return false;"></a>
+<script>
+/**
+* Function that captures a click on an outbound link in Analytics.
+* This function takes a valid URL string as an argument, and uses that URL string
+* as the event label. Setting the transport method to 'beacon' lets the hit be sent
+* using 'navigator.sendBeacon' in browser that support it.
+*/
+var captureOutboundLink = function(url) {
+   ga('send', 'event', 'outbound', 'click', url, {
+     'transport': 'beacon',
+     'hitCallback': function(){
+       var i, j;
+       for (i=0; i < 100000; i=i+1){j = j+1;};
+       document.location = url;}
+   });
+}
+document.getElementById('my_link').click();
+</script>
+</body>
+</html> 
+

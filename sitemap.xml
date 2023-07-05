@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+
+<url>
+  <loc>https://danelh.github.io/</loc>
+  <lastmod>2020-11-09T07:40:23+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://danelh.github.io/collocations/</loc>
+  <lastmod>2020-10-26T10:56:14+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://danelh.github.io/verbs/</loc>
+  <lastmod>2020-10-26T10:32:04+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://danelh.github.io/nouns/</loc>
+  <lastmod>2020-11-05T17:19:15+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://danelh.github.io/el_lewis_and_short.html</loc>
+  <lastmod>2020-11-09T07:40:19+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://danelh.github.io/latin_blog/</loc>
+  <lastmod>2020-11-15T07:47:40+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://danelh.github.io/about</loc>
+  <lastmod>2020-11-09T07:40:23+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://danelh.github.io/collocations/info.html</loc>
+  <lastmod>2020-10-26T10:56:20+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://danelh.github.io/verbs/info.html</loc>
+  <lastmod>2020-10-26T10:32:08+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://danelh.github.io/nouns/info.html</loc>
+  <lastmod>2020-11-05T17:19:22+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://danelh.github.io/latin_blog/2020/11/07/Gradus-ad-Parnassum.html</loc>
+  <lastmod>2020-11-15T07:47:40+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://danelh.github.io/latin_blog/2020/11/05/the-durham-proverbs.html</loc>
+  <lastmod>2020-11-15T07:47:40+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://danelh.github.io/collocations/?algo=w2&amp;lemma=cado</loc>
+  <lastmod>2020-10-26T10:56:14+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://danelh.github.io/verbs/docs_names.txt</loc>
+  <lastmod>2020-10-26T10:32:04+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+
+
+</urlset>
