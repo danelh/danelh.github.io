@@ -57,8 +57,82 @@
       .then(response => response.json())
       .then(data => {
         paragraphData = data;
-        displayParagraph(currentParagraph);
+		init();
+        //displayParagraph(currentParagraph);
       });
+
+	function init(){
+
+		init_url_change();
+		fire_from_url();
+
+		//displayParagraph(currentParagraph);
+	}
+
+	function fire_from_url(){
+		load_params_from_url();
+		displayParagraph(currentParagraph);
+	}
+
+	function init_url_change(){
+		window.addEventListener('popstate', function(){
+			user_clicked_browser = true
+			fire_from_url();
+			//go_to_top_of_page();
+		})
+	}
+
+	function update_url_params(){
+		var url_string = window.location.href
+		var url = new URL(url_string);
+		url.searchParams.set("p", currentParagraph);
+		//if (!user_clicked_browser)
+		//{
+		//	// replaceState if only algo has changed. we don't want to fill the history. we want efficient back
+		//	// also, you can toggle with arrows the algo.
+			url_p = get_param_from_url("p");
+			if (url_p != currentParagraph){
+				window.history.pushState('updated params', '', url.toString());
+			}
+		//	else{
+		//		window.history.replaceState('updated params', '', url.toString());
+		//	}
+		//}
+		//else{
+		//	// init here - because async
+		//	user_clicked_browser = false
+		//}
+    }
+
+	function isInteger(value) {
+		return /^\d+$/.test(value);
+	}
+
+	function load_para_from_url(){
+		p = get_param_from_url("p");
+		if (p){
+			//document.getElementById("lemmas_select").value = lemma;
+			if (!isInteger(p)){
+				p = 0;
+			}
+			currentParagraph = p;
+			if ((currentParagraph < 0) || (currentParagraph >= paragraphData.length)){
+				currentParagraph = paragraphData.length - 1;
+			}
+
+		}
+	}
+
+	function load_params_from_url(){
+		load_para_from_url();
+	}
+
+	function get_param_from_url(param){
+		var url_string = window.location.href
+		var url = new URL(url_string);
+		var c = url.searchParams.get(param);
+		return c;
+    }
 
     function displayParagraph(index) {
       var container = document.getElementById('container');
@@ -77,6 +151,8 @@
 
       container.appendChild(latinDiv);
       container.appendChild(englishDiv);
+
+	  update_url_params();
     }
 
     function nextParagraph() {
